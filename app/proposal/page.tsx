@@ -264,31 +264,25 @@ function HubDiagram() {
 }
 
 /* ───────────────────────── Animated Counter ───────────────────────── */
-function AnimatedNumber({ value, suffix = "" }: { value: number; suffix?: string }) {
+function AnimatedNumber({ value, suffix = "", delay = 0 }: { value: number; suffix?: string; delay?: number }) {
   const [display, setDisplay] = useState(0)
-  const ref = useRef<HTMLSpanElement>(null)
-  const started = useRef(false)
 
   useEffect(() => {
-    const observer = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting && !started.current) {
-        started.current = true
-        const duration = 1200
-        const start = performance.now()
-        const tick = (now: number) => {
-          const progress = Math.min((now - start) / duration, 1)
-          const eased = 1 - Math.pow(1 - progress, 3)
-          setDisplay(Math.round(eased * value))
-          if (progress < 1) requestAnimationFrame(tick)
-        }
-        requestAnimationFrame(tick)
+    const timer = setTimeout(() => {
+      const duration = 1200
+      const start = performance.now()
+      const tick = (now: number) => {
+        const progress = Math.min((now - start) / duration, 1)
+        const eased = 1 - Math.pow(1 - progress, 3)
+        setDisplay(Math.round(eased * value))
+        if (progress < 1) requestAnimationFrame(tick)
       }
-    }, { threshold: 0.5 })
-    if (ref.current) observer.observe(ref.current)
-    return () => observer.disconnect()
-  }, [value])
+      requestAnimationFrame(tick)
+    }, 300 + delay)
+    return () => clearTimeout(timer)
+  }, [value, delay])
 
-  return <span ref={ref} style={{ fontVariantNumeric: "tabular-nums" }}>{display}{suffix}</span>
+  return <span style={{ fontVariantNumeric: "tabular-nums" }}>{display}{suffix}</span>
 }
 
 /* ───────────────────────── CTA Section ───────────────────────── */
@@ -500,7 +494,7 @@ export default function ProposalPage() {
               >
                 <p style={{ fontSize: 11, fontWeight: 500, color: "var(--color-text-faint)", textTransform: "uppercase", letterSpacing: 1, marginBottom: 8 }}>{stat.label}</p>
                 <p style={{ fontSize: 32, fontWeight: 700, color: "#2563eb", lineHeight: 1 }}>
-                  <AnimatedNumber value={stat.value} suffix={stat.suffix} />
+                  <AnimatedNumber value={stat.value} suffix={stat.suffix} delay={i * 200} />
                 </p>
               </motion.div>
             ))}
@@ -508,7 +502,7 @@ export default function ProposalPage() {
 
           {/* ── Section 1: AIができること ── */}
           <section ref={sectionRefs[0]} style={{ marginBottom: 96, scrollMarginTop: 80 }}>
-            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5 }}>
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.2 }}>
               <h2 style={{ fontSize: 28, fontWeight: 700, color: "var(--color-text)", marginBottom: 4 }}>AIでできること</h2>
               <p style={{ fontSize: 14, color: "var(--color-text-muted)", marginBottom: 32 }}>6つの機能カテゴリ</p>
             </motion.div>
@@ -518,9 +512,8 @@ export default function ProposalPage() {
                 <motion.div
                   key={i}
                   initial={{ opacity: 0, y: 24 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.4, delay: i * 0.08 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4, delay: 0.3 + i * 0.1 }}
                 >
                   <TiltCard
                     style={{
@@ -558,7 +551,7 @@ export default function ProposalPage() {
 
           {/* ── Section 2: ミクロンでの活用方法 ── */}
           <section ref={sectionRefs[1]} style={{ marginBottom: 96, scrollMarginTop: 80 }}>
-            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5 }}>
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.2 }}>
               <h2 style={{ fontSize: 28, fontWeight: 700, color: "var(--color-text)", marginBottom: 4 }}>株式会社ミクロン × AI</h2>
               <p style={{ fontSize: 14, color: "var(--color-text-muted)", marginBottom: 32 }}>カーソルをかざすと詳細が覗けます</p>
             </motion.div>
@@ -568,9 +561,8 @@ export default function ProposalPage() {
                 <motion.div
                   key={i}
                   initial={{ opacity: 0, y: 24 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.4, delay: i * 0.08 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4, delay: 0.3 + i * 0.1 }}
                 >
                   <PeekCard
                     color={card.color}
@@ -635,7 +627,7 @@ export default function ProposalPage() {
 
           {/* ── Section 3: Claudeからの提案 ── */}
           <section ref={sectionRefs[2]} style={{ scrollMarginTop: 80 }}>
-            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5 }}>
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.2 }}>
               <h2 style={{ fontSize: 28, fontWeight: 700, color: "var(--color-text)", marginBottom: 4 }}>Claudeからの提案</h2>
               <p style={{ fontSize: 14, color: "var(--color-text-muted)", marginBottom: 16 }}>ミクロンの業務効率化ロードマップ</p>
             </motion.div>
