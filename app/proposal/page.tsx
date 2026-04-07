@@ -45,6 +45,20 @@ const cssVars = `
     --color-primary: #2563eb;
     --color-primary-hover: #1d4ed8;
   }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .fade-up { animation: fadeUp 0.5s ease forwards; }
+  .fade-up-1 { animation: fadeUp 0.5s ease 0.1s forwards; opacity: 0; }
+  .fade-up-2 { animation: fadeUp 0.5s ease 0.2s forwards; opacity: 0; }
+  .fade-up-3 { animation: fadeUp 0.5s ease 0.3s forwards; opacity: 0; }
+  .fade-up-4 { animation: fadeUp 0.5s ease 0.4s forwards; opacity: 0; }
+  .fade-up-5 { animation: fadeUp 0.5s ease 0.5s forwards; opacity: 0; }
+  .fade-up-6 { animation: fadeUp 0.5s ease 0.6s forwards; opacity: 0; }
+  .fade-up-7 { animation: fadeUp 0.5s ease 0.7s forwards; opacity: 0; }
+  .fade-up-8 { animation: fadeUp 0.5s ease 0.8s forwards; opacity: 0; }
+  .fade-up-9 { animation: fadeUp 0.5s ease 0.9s forwards; opacity: 0; }
 `
 
 /* ───────────────────────── Types ───────────────────────── */
@@ -389,8 +403,6 @@ export default function ProposalPage() {
   const [activeSection, setActiveSection] = useState(0)
   const [expandedCard, setExpandedCard] = useState<number | null>(null)
   const [activePhase, setActivePhase] = useState(0)
-  const [mounted, setMounted] = useState(false)
-  useEffect(() => { setMounted(true) }, [])
   const sectionRefs = [useRef<HTMLDivElement>(null), useRef<HTMLDivElement>(null), useRef<HTMLDivElement>(null)]
 
   useEffect(() => {
@@ -425,8 +437,8 @@ export default function ProposalPage() {
         }}>
           <div style={{ maxWidth: 1152, margin: "0 auto", padding: "0 32px", height: 56, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
             <motion.span
-              initial={false}
-              animate={mounted ? { opacity: 1, x: 0 } : { opacity: 0, x: -16 }}
+              initial={{ opacity: 1, x: 0 }}
+              animate={{ opacity: 1, x: 0 }}
               style={{ fontSize: 15, fontWeight: 600, color: "var(--color-text)" }}
             >
               株式会社ミクロン × AI活用提案
@@ -470,10 +482,8 @@ export default function ProposalPage() {
         <main style={{ maxWidth: 1152, margin: "0 auto", padding: "96px 32px 64px", position: "relative", zIndex: 1 }}>
 
           {/* ── Hero Stats ── */}
-          <motion.div
-            initial={false}
-            animate={mounted ? { opacity: 1, y: 0 } : { opacity: 0, y: 32 }}
-            transition={{ duration: 0.6 }}
+          <div
+            className="fade-up"
             style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: 16, marginBottom: 64 }}
           >
             {[
@@ -483,9 +493,7 @@ export default function ProposalPage() {
             ].map((stat, i) => (
               <motion.div
                 key={i}
-                initial={false}
-                animate={mounted ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 }}
-                transition={{ delay: mounted ? 0.2 + i * 0.1 : 0 }}
+                className={`fade-up-${i + 1}`}
                 style={{
                   background: "var(--color-bg-subtle)",
                   border: "1px solid var(--color-border)",
@@ -500,22 +508,20 @@ export default function ProposalPage() {
                 </p>
               </motion.div>
             ))}
-          </motion.div>
+          </div>
 
           {/* ── Section 1: AIができること ── */}
           <section ref={sectionRefs[0]} style={{ marginBottom: 96, scrollMarginTop: 80 }}>
-            <motion.div initial={false} animate={mounted ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }} transition={{ duration: 0.5, delay: 0.2 }}>
+            <div className="fade-up-2">
               <h2 style={{ fontSize: 28, fontWeight: 700, color: "var(--color-text)", marginBottom: 4 }}>AIでできること</h2>
               <p style={{ fontSize: 14, color: "var(--color-text-muted)", marginBottom: 32 }}>6つの機能カテゴリ</p>
-            </motion.div>
+            </div>
 
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))", gap: 16 }}>
               {categories.map((cat, i) => (
                 <motion.div
                   key={i}
-                  initial={false}
-                  animate={mounted ? { opacity: 1, y: 0 } : { opacity: 0, y: 24 }}
-                  transition={{ duration: 0.4, delay: mounted ? 0.3 + i * 0.1 : 0 }}
+                  className={`fade-up-${i + 3}`}
                 >
                   <TiltCard
                     style={{
@@ -553,18 +559,16 @@ export default function ProposalPage() {
 
           {/* ── Section 2: ミクロンでの活用方法 ── */}
           <section ref={sectionRefs[1]} style={{ marginBottom: 96, scrollMarginTop: 80 }}>
-            <motion.div initial={false} animate={mounted ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }} transition={{ duration: 0.5, delay: 0.2 }}>
+            <div className="fade-up-2">
               <h2 style={{ fontSize: 28, fontWeight: 700, color: "var(--color-text)", marginBottom: 4 }}>株式会社ミクロン × AI</h2>
               <p style={{ fontSize: 14, color: "var(--color-text-muted)", marginBottom: 32 }}>カーソルをかざすと詳細が覗けます</p>
-            </motion.div>
+            </div>
 
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(340px, 1fr))", gap: 24 }}>
               {usageCards.map((card, i) => (
                 <motion.div
                   key={i}
-                  initial={false}
-                  animate={mounted ? { opacity: 1, y: 0 } : { opacity: 0, y: 24 }}
-                  transition={{ duration: 0.4, delay: mounted ? 0.3 + i * 0.1 : 0 }}
+                  className={`fade-up-${i + 3}`}
                 >
                   <PeekCard
                     color={card.color}
@@ -629,10 +633,10 @@ export default function ProposalPage() {
 
           {/* ── Section 3: Claudeからの提案 ── */}
           <section ref={sectionRefs[2]} style={{ scrollMarginTop: 80 }}>
-            <motion.div initial={false} animate={mounted ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }} transition={{ duration: 0.5, delay: 0.2 }}>
+            <div className="fade-up-2">
               <h2 style={{ fontSize: 28, fontWeight: 700, color: "var(--color-text)", marginBottom: 4 }}>Claudeからの提案</h2>
               <p style={{ fontSize: 14, color: "var(--color-text-muted)", marginBottom: 16 }}>ミクロンの業務効率化ロードマップ</p>
-            </motion.div>
+            </div>
 
             <StepProgress phase={activePhase} total={3} />
 
