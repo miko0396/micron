@@ -8,7 +8,7 @@ import {
   ChevronDown, ChevronRight, ArrowRight, ExternalLink
 } from "lucide-react"
 
-/* âââââââââââââââââââââââââ Types âââââââââââââââââââââââââ */
+/* ───────────────────────── Types ───────────────────────── */
 interface CategoryCard {
   num: string
   title: string
@@ -41,29 +41,29 @@ interface Phase {
   dotColor: string
 }
 
-/* âââââââââââââââââââââââââ Data âââââââââââââââââââââââââ */
+/* ───────────────────────── Data ───────────────────────── */
 const categories: CategoryCard[] = [
-  { num: "01", title: "æå ±å¦çã»ç¥è­æ´»ç¨", description: "ãã­ã¥ã¡ã³ãè¦ç´ã»ãã¬ãã¸æ¤ç´¢ã»ç¿»è¨³ã»è­°äºé²", color: "text-blue-400", border: "border-blue-400", bg: "bg-blue-400/10", icon: <Search className="w-5 h-5" /> },
-  { num: "02", title: "å¶ä½ã»ã¢ã¦ããããçæ", description: "UIä½æã»SVGçæã»ç»åçæã»ããã­ã¤", color: "text-emerald-400", border: "border-emerald-400", bg: "bg-emerald-400/10", icon: <FileText className="w-5 h-5" /> },
-  { num: "03", title: "å¤é¨ãµã¼ãã¹é£æº", description: "Gmailã»Notionã»Canvaã»ãã¡ã¤ã«èªåæ´ç", color: "text-teal-400", border: "border-teal-400", bg: "bg-teal-400/10", icon: <Globe className="w-5 h-5" /> },
-  { num: "04", title: "ãã©ã¦ã¶ã»PCæä½èªåå", description: "å¥åã»ã¯ãªãã¯ã»ã­ã°ã¤ã³ã»ç»é¢æä½ä»£è¡", color: "text-purple-400", border: "border-purple-400", bg: "bg-purple-400/10", icon: <Monitor className="w-5 h-5" /> },
-  { num: "05", title: "ã¿ã¹ã¯èªååã»ã¨ã¼ã¸ã§ã³ã", description: "ããªã¬ã¼å®è¡ã»èªå¾é£éã»å®æã¿ã¹ã¯", color: "text-amber-400", border: "border-amber-400", bg: "bg-amber-400/10", icon: <Zap className="w-5 h-5" /> },
-  { num: "06", title: "ã¢ããªã¸ã®AIçµã¿è¾¼ã¿", description: "Claude APIã»Gemini APIã»ç¤¾åãã¼ã«ã¸ã®å®è£", color: "text-rose-400", border: "border-rose-400", bg: "bg-rose-400/10", icon: <Code className="w-5 h-5" /> },
+  { num: "01", title: "情報処理・知識活用", description: "ドキュメント要約・ナレッジ検索・翻訳・議事録", color: "text-blue-400", border: "border-blue-400", bg: "bg-blue-400/10", icon: <Search className="w-5 h-5" /> },
+  { num: "02", title: "制作・アウトプット生成", description: "UI作成・SVG生成・画像生成・デプロイ", color: "text-emerald-400", border: "border-emerald-400", bg: "bg-emerald-400/10", icon: <FileText className="w-5 h-5" /> },
+  { num: "03", title: "外部サービス連携", description: "Gmail・Notion・Canva・ファイル自動整理", color: "text-teal-400", border: "border-teal-400", bg: "bg-teal-400/10", icon: <Globe className="w-5 h-5" /> },
+  { num: "04", title: "ブラウザ・PC操作自動化", description: "入力・クリック・ログイン・画面操作代行", color: "text-purple-400", border: "border-purple-400", bg: "bg-purple-400/10", icon: <Monitor className="w-5 h-5" /> },
+  { num: "05", title: "タスク自動化・エージェント", description: "トリガー実行・自律連鎖・定期タスク", color: "text-amber-400", border: "border-amber-400", bg: "bg-amber-400/10", icon: <Zap className="w-5 h-5" /> },
+  { num: "06", title: "アプリへのAI組み込み", description: "Claude API・Gemini API・社内ツールへの実装", color: "text-rose-400", border: "border-rose-400", bg: "bg-rose-400/10", icon: <Code className="w-5 h-5" /> },
 ]
 
 const usageCards: UsageCard[] = [
-  { num: "01", title: "å³é¢ã»ä»æ§æ¸ç®¡ç", description: "PDFæ¤ç´¢ã»è±èªç¿»è¨³ã»ããã¥ã¢ã«æ´å½¢ã»å¤æ´å±¥æ­´è¨é²", services: ["Notion", "NotebookLM"], color: "text-blue-400", border: "border-blue-400", bg: "bg-blue-400/10", icon: <ClipboardList className="w-5 h-5" />, claudeCan: ["PDFã»Wordãã¡ã¤ã«ã®åå®¹ãç¬æã«è¦ç´", "è±èªã®æè¡ä»æ§æ¸ãèªç¶ãªæ¥æ¬èªã«ç¿»è¨³", "å¤æ´ç¹ã®å·®åãèªåã§æ¤åºã»è¨é²"], linked: ["Notionã§ãã¬ãã¸ãã¼ã¹ãæ§ç¯ãå¨ç¤¾å±æ", "NotebookLMã§éå»å³é¢ãæ¨ªæ­æ¤ç´¢"] },
-  { num: "02", title: "åè³ªã¬ãã¼ãä½æ", description: "æ¤æ»ãã¼ã¿éè¨ã»ä¸è¯ã¬ãã¼ãçæã»é¡§å®¢åãå ±åæ¸", services: ["ChatGPT", "Canva"], color: "text-emerald-400", border: "border-emerald-400", bg: "bg-emerald-400/10", icon: <BarChart3 className="w-5 h-5" />, claudeCan: ["æ¤æ»ãã¼ã¿ã®CSVãåæã»éè¨", "ä¸è¯åå ã®åæã¬ãã¼ãããã©ãã", "é¡§å®¢åãå ±åæ¸ã®ãã©ã¼ãããæ´å½¢"], linked: ["ChatGPTã§ã°ã©ãã»å³è¡¨ãçæ", "Canvaã§ãã­ãã§ãã·ã§ãã«ãªå ±åæ¸ãã¶ã¤ã³"] },
-  { num: "03", title: "çºæ³¨ã»å¨åº«èªåå", description: "çºæ³¨æ¸ä½æã»ä»å¥åã¡ã¼ã«èªåè¿ä¿¡ã»ä¾¡æ ¼æ¯è¼è¡¨", services: ["N8N", "Gmail"], color: "text-teal-400", border: "border-teal-400", bg: "bg-teal-400/10", icon: <ShoppingCart className="w-5 h-5" />, claudeCan: ["çºæ³¨æ¸ãã³ãã¬ã¼ãã®èªåçæ", "ä»å¥åããã®ã¡ã¼ã«ãè§£æã»åé¡", "ä¾¡æ ¼æ¯è¼è¡¨ã®ä½æã¨æé©ææ¡"], linked: ["N8Nã§å¨åº«é¾å¤ããªã¬ã¼âèªåçºæ³¨ãã­ã¼", "Gmailé£æºã§ä»å¥åã¸ã®èªåè¿ä¿¡"] },
-  { num: "04", title: "çç£è¨ç»ã»å·¥ç¨ç®¡ç", description: "ããã«ããã¯åæã»ä½æ¥­æç¤ºæ¸çæã»é²æå¯è¦å", services: ["Notion", "N8N"], color: "text-purple-400", border: "border-purple-400", bg: "bg-purple-400/10", icon: <Settings className="w-5 h-5" />, claudeCan: ["çç£ãã¼ã¿ããããã«ããã¯ãç¹å®", "ä½æ¥­æç¤ºæ¸ã®èªåçæ", "å·¥ç¨éã®ä¾å­é¢ä¿ãåæ"], linked: ["Notionã§é²æããã·ã¥ãã¼ããæ§ç¯", "N8Nã§å·¥ç¨å®äºâæ¬¡å·¥ç¨éç¥ãèªåå"] },
-  { num: "05", title: "å®åæ¥­åèªåå", description: "æ¥å ±ã»é±å ±çæã»ã¡ã¼ã«èªåä»åãã»ç³è«æ¸ä½æ", services: ["N8N", "Notion"], color: "text-amber-400", border: "border-amber-400", bg: "bg-amber-400/10", icon: <Clock className="w-5 h-5" />, claudeCan: ["æ¥å ±ãã³ãã¬ã¼ãã®èªåå¥å", "åä¿¡ã¡ã¼ã«ã®åªååº¦åé¡", "åç¨®ç³è«æ¸ã®ä¸æ¸ãä½æ"], linked: ["N8Nã§å®æããªã¬ã¼âæ¥å ±èªååé", "Notionã«é±å ±ãèªåéç´ã»ä¿å­"] },
-  { num: "06", title: "é³å£°æ¥å ±ã»è­°äºé²", description: "ç¾å ´é³å£°âæå­èµ·ããâæ´å½¢âNotionèªåä¿å­", services: ["Tipeless", "Notion"], color: "text-rose-400", border: "border-rose-400", bg: "bg-rose-400/10", icon: <Mic className="w-5 h-5" />, claudeCan: ["æå­èµ·ãããã­ã¹ãã®æ´å½¢ã»è¦ç´", "ã¢ã¯ã·ã§ã³ã¢ã¤ãã ã®èªåæ½åº", "è­°äºé²ãã©ã¼ãããã¸ã®å¤æ"], linked: ["Tipelessã§ä¼è­°ã»ç¾å ´é³å£°ãèªåé²é³âæå­èµ·ãã", "Notionã«è­°äºé²ãèªåä¿å­ã»ã¿ã°ä»ã"] },
+  { num: "01", title: "図面・仕様書管理", description: "PDF検索・英語翻訳・マニュアル整形・変更履歴記録", services: ["Notion", "NotebookLM"], color: "text-blue-400", border: "border-blue-400", bg: "bg-blue-400/10", icon: <ClipboardList className="w-5 h-5" />, claudeCan: ["PDF・Wordファイルの内容を瞬時に要約", "英語の技術仕様書を自然な日本語に翻訳", "変更点の差分を自動で検出・記録"], linked: ["Notionでナレッジベースを構築し全社共有", "NotebookLMで過去図面を横断検索"] },
+  { num: "02", title: "品質レポート作成", description: "検査データ集計・不良レポート生成・顧客向け報告書", services: ["ChatGPT", "Canva"], color: "text-emerald-400", border: "border-emerald-400", bg: "bg-emerald-400/10", icon: <BarChart3 className="w-5 h-5" />, claudeCan: ["検査データのCSVを分析・集計", "不良原因の分析レポートをドラフト", "顧客向け報告書のフォーマット整形"], linked: ["ChatGPTでグラフ・図表を生成", "Canvaでプロフェッショナルな報告書デザイン"] },
+  { num: "03", title: "発注・在庫自動化", description: "発注書作成・仕入先メール自動返信・価格比較表", services: ["N8N", "Gmail"], color: "text-teal-400", border: "border-teal-400", bg: "bg-teal-400/10", icon: <ShoppingCart className="w-5 h-5" />, claudeCan: ["発注書テンプレートの自動生成", "仕入先からのメールを解析・分類", "価格比較表の作成と最適提案"], linked: ["N8Nで在庫閾値トリガー→自動発注フロー", "Gmail連携で仕入先への自動返信"] },
+  { num: "04", title: "生産計画・工程管理", description: "ボトルネック分析・作業指示書生成・進捗可視化", services: ["Notion", "N8N"], color: "text-purple-400", border: "border-purple-400", bg: "bg-purple-400/10", icon: <Settings className="w-5 h-5" />, claudeCan: ["生産データからボトルネックを特定", "作業指示書の自動生成", "工程間の依存関係を分析"], linked: ["Notionで進捗ダッシュボードを構築", "N8Nで工程完了→次工程通知を自動化"] },
+  { num: "05", title: "定型業務自動化", description: "日報・週報生成・メール自動仕分け・申請書作成", services: ["N8N", "Notion"], color: "text-amber-400", border: "border-amber-400", bg: "bg-amber-400/10", icon: <Clock className="w-5 h-5" />, claudeCan: ["日報テンプレートの自動入力", "受信メールの優先度分類", "各種申請書の下書き作成"], linked: ["N8Nで定時トリガー→日報自動収集", "Notionに週報を自動集約・保存"] },
+  { num: "06", title: "音声日報・議事録", description: "現場音声→文字起こし→整形→Notion自動保存", services: ["Tipeless", "Notion"], color: "text-rose-400", border: "border-rose-400", bg: "bg-rose-400/10", icon: <Mic className="w-5 h-5" />, claudeCan: ["文字起こしテキストの整形・要約", "アクションアイテムの自動抽出", "議事録フォーマットへの変換"], linked: ["Tipelessで会議・現場音声を自動録音→文字起こし", "Notionに議事録を自動保存・タグ付け"] },
 ]
 
 const phases: Phase[] = [
-  { title: "ããå§ãããã", period: "ä»ããã»ç¡æãä½ã³ã¹ã", items: ["é³å£°æ¥å ±ã®Tipelesså°å¥", "å³é¢ã»ä»æ§æ¸ã®Claudeæ¤ç´¢", "ã¡ã¼ã«è¿ä¿¡ã®èªååï¼Gmailé£æºï¼"], badgeColor: "bg-emerald-500/20 text-emerald-400 border-emerald-500/30", badgeText: "å³å°å¥å¯è½", dotColor: "bg-emerald-400" },
-  { title: "1ã2ã¶æã§æ§ç¯", period: "ä¸­æã»ããã¢ãã", items: ["N8Nã§çºæ³¨ã»å¨åº«ã®èªåããªã¬ã¼è¨­å®", "Notionãã¬ãã¸ãã¼ã¹ã®æ´å", "åè³ªã¬ãã¼ãã®èªåçæãã­ã¼"], badgeColor: "bg-blue-500/20 text-blue-400 border-blue-500/30", badgeText: "è¦ã»ããã¢ãã", dotColor: "bg-blue-400" },
-  { title: "æ¬æ ¼æ´»ç¨", period: "3ã¶æã", items: ["åºå¹¹ã·ã¹ãã ã¸ã®Claude APIçµã¿è¾¼ã¿", "çç£è¨ç»AIã¨ã¼ã¸ã§ã³ãã®æ§ç¯", "å¨å·¥ç¨ã®ãã¼ã¿é£æºã»èªåå"], badgeColor: "bg-purple-500/20 text-purple-400 border-purple-500/30", badgeText: "ã«ã¹ã¿ã éçº", dotColor: "bg-purple-400" },
+  { title: "すぐ始められる", period: "今すぐ・無料〜低コスト", items: ["音声日報のTipeless導入", "図面・仕様書のClaude検索", "メール返信の自動化（Gmail連携）"], badgeColor: "bg-emerald-500/20 text-emerald-400 border-emerald-500/30", badgeText: "即導入可能", dotColor: "bg-emerald-400" },
+  { title: "1〜2ヶ月で構築", period: "中期セットアップ", items: ["N8Nで発注・在庫の自動トリガー設定", "Notionナレッジベースの整備", "品質レポートの自動生成フロー"], badgeColor: "bg-blue-500/20 text-blue-400 border-blue-500/30", badgeText: "要セットアップ", dotColor: "bg-blue-400" },
+  { title: "本格活用", period: "3ヶ月〜", items: ["基幹システムへのClaude API組み込み", "生産計画AIエージェントの構築", "全工程のデータ連携・自動化"], badgeColor: "bg-purple-500/20 text-purple-400 border-purple-500/30", badgeText: "カスタム開発", dotColor: "bg-purple-400" },
 ]
 
 const hubNodes = [
@@ -77,10 +77,10 @@ const hubNodes = [
   { name: "Vercel/V0", angle: 315, type: "claude" },
 ]
 
-/* âââââââââââââââââââââââââ Sections âââââââââââââââââââââââââ */
-const sections = ["AIãã§ãããã¨", "ãã¯ã­ã³ã§ã®æ´»ç¨æ¹æ³", "Claudeããã®ææ¡"]
+/* ───────────────────────── Sections ───────────────────────── */
+const sections = ["AIができること", "ミクロンでの活用方法", "Claudeからの提案"]
 
-/* âââââââââââââââââââââââââ Hub Diagram âââââââââââââââââââââââââ */
+/* ───────────────────────── Hub Diagram ───────────────────────── */
 function HubDiagram() {
   const radius = 140
   const cx = 200
@@ -88,8 +88,8 @@ function HubDiagram() {
   return (
     <div className="flex flex-col items-center gap-4 mt-12">
       <div className="flex items-center gap-6 text-sm">
-        <span className="flex items-center gap-2"><span className="w-3 h-3 rounded-full bg-rose-400/60 inline-block" /> è¦æãè£å®</span>
-        <span className="flex items-center gap-2"><span className="w-3 h-3 rounded-full bg-slate-400/60 inline-block" /> Claudeä¸»ä½</span>
+        <span className="flex items-center gap-2"><span className="w-3 h-3 rounded-full bg-rose-400/60 inline-block" /> 苦手を補完</span>
+        <span className="flex items-center gap-2"><span className="w-3 h-3 rounded-full bg-slate-400/60 inline-block" /> Claude主体</span>
       </div>
       <svg viewBox="0 0 400 400" className="w-[320px] h-[320px] md:w-[400px] md:h-[400px]">
         <defs>
@@ -118,17 +118,17 @@ function HubDiagram() {
   )
 }
 
-/* âââââââââââââââââââââââââ CTA Section âââââââââââââââââââââââââ */
+/* ───────────────────────── CTA Section ───────────────────────── */
 function CTASection() {
   const [selected, setSelected] = useState<number | null>(null)
   const options = [
-    { label: "é³å£°æ¥å ±ãè©¦ã", detail: "Tipeless + Claude ã§ç¾å ´ã®é³å£°ãèªåã§æ¥å ±åãã¹ããã§é²é³ããã ãã§ãæ´å½¢ãããæ¥å ±ãNotionã«ä¿å­ããã¾ãã" },
-    { label: "æ¸é¡ä½æ¥­ãæ¸ãã", detail: "å³é¢ã»ä»æ§æ¸ãClaudeã§æ¤ç´¢ã»è¦ç´ãNotebookLMã¨çµã¿åããã¦ãã¬ãã¸ãã¼ã¹ãæ§ç¯ããå¿è¦ãªæå ±ã«å³ã¢ã¯ã»ã¹ã" },
-    { label: "èªååãå§ãã", detail: "N8Nã§çºæ³¨ã»å¨åº«ç®¡çã®ããªã¬ã¼ãè¨­å®ãå¨åº«ãé¾å¤ãä¸åãã¨èªåçºæ³¨ãGmailé£æºã§ä»å¥åã«èªåã¡ã¼ã«éä¿¡ã" },
+    { label: "音声日報を試す", detail: "Tipeless + Claude で現場の音声を自動で日報化。スマホで録音するだけで、整形された日報がNotionに保存されます。" },
+    { label: "書類作業を減らす", detail: "図面・仕様書をClaudeで検索・要約。NotebookLMと組み合わせてナレッジベースを構築し、必要な情報に即アクセス。" },
+    { label: "自動化を始める", detail: "N8Nで発注・在庫管理のトリガーを設定。在庫が閾値を下回ると自動発注、Gmail連携で仕入先に自動メール送信。" },
   ]
   return (
     <div className="mt-12 p-6 md:p-8 rounded-xl bg-white/[0.04] border border-white/10">
-      <p className="text-lg font-semibold text-white mb-6 text-center">ã¾ãä½ããå§ããï¼</p>
+      <p className="text-lg font-semibold text-white mb-6 text-center">まず何から始める？</p>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {options.map((opt, i) => (
           <button key={i} onClick={() => setSelected(selected === i ? null : i)} className={`text-left p-4 rounded-lg border transition-all duration-200 ${selected === i ? "border-blue-400 bg-blue-500/10" : "border-white/10 bg-white/[0.03] hover:border-white/20"}`}>
@@ -150,7 +150,7 @@ function CTASection() {
   )
 }
 
-/* âââââââââââââââââââââââââ Main Page âââââââââââââââââââââââââ */
+/* ───────────────────────── Main Page ───────────────────────── */
 export default function ProposalPage() {
   const [activeSection, setActiveSection] = useState(0)
   const [expandedCard, setExpandedCard] = useState<number | null>(null)
@@ -177,10 +177,10 @@ export default function ProposalPage() {
 
   return (
     <div className="min-h-screen" style={{ background: "#1E2D4E" }}>
-      {/* ââ Navigation ââ */}
+      {/* ── Navigation ── */}
       <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/10" style={{ background: "rgba(30,45,78,0.95)", backdropFilter: "blur(12px)" }}>
         <div className="max-w-6xl mx-auto px-4 md:px-8 h-14 flex items-center justify-between">
-          <span className="text-sm md:text-base font-semibold text-white">æ ªå¼ä¼ç¤¾ãã¯ã­ã³ Ã AIæ´»ç¨ææ¡</span>
+          <span className="text-sm md:text-base font-semibold text-white">株式会社ミクロン × AI活用提案</span>
           <div className="flex gap-1">
             {sections.map((s, i) => (
               <button key={i} onClick={() => scrollTo(i)} className="relative px-3 py-2 text-xs md:text-sm transition-colors duration-200" style={{ color: activeSection === i ? "#3B82F6" : "rgba(255,255,255,0.6)" }}>
@@ -193,11 +193,11 @@ export default function ProposalPage() {
       </nav>
 
       <main className="max-w-6xl mx-auto px-4 md:px-8 pt-24 pb-16">
-        {/* ââ Section 1: AIãã§ãããã¨ ââ */}
+        {/* ── Section 1: AIができること ── */}
         <section ref={sectionRefs[0]} className="mb-24 scroll-mt-20">
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.4 }}>
-            <h2 className="text-2xl md:text-3xl font-bold text-white mb-2">AIã§ã§ãããã¨</h2>
-            <p className="text-slate-400 mb-8">6ã¤ã®æ©è½ã«ãã´ãª</p>
+            <h2 className="text-2xl md:text-3xl font-bold text-white mb-2">AIでできること</h2>
+            <p className="text-slate-400 mb-8">6つの機能カテゴリ</p>
           </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -217,11 +217,11 @@ export default function ProposalPage() {
           <HubDiagram />
         </section>
 
-        {/* ââ Section 2: ãã¯ã­ã³ã§ã®æ´»ç¨æ¹æ³ ââ */}
+        {/* ── Section 2: ミクロンでの活用方法 ── */}
         <section ref={sectionRefs[1]} className="mb-24 scroll-mt-20">
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.4 }}>
-            <h2 className="text-2xl md:text-3xl font-bold text-white mb-2">æ ªå¼ä¼ç¤¾ãã¯ã­ã³ Ã AI</h2>
-            <p className="text-slate-400 mb-8">è£½é ã»çç£ç®¡çæ¥­åã¸ã®å·ä½çãªæ´»ç¨</p>
+            <h2 className="text-2xl md:text-3xl font-bold text-white mb-2">株式会社ミクロン × AI</h2>
+            <p className="text-slate-400 mb-8">製造・生産管理業務への具体的な活用</p>
           </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -249,7 +249,7 @@ export default function ProposalPage() {
                         <div className="p-4 bg-white/[0.02]">
                           <p className="text-xs font-semibold text-blue-400 mb-2 flex items-center gap-1.5">
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="9 12 11 14 15 10"/></svg>
-                            Claudeãã§ãããã¨
+                            Claudeができること
                           </p>
                           <ul className="space-y-1.5">
                             {card.claudeCan.map((item, j) => (
@@ -262,7 +262,7 @@ export default function ProposalPage() {
                         <div className="p-4 bg-rose-500/[0.04] border-l border-white/10">
                           <p className="text-xs font-semibold text-rose-400 mb-2 flex items-center gap-1.5">
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-                            é£æºãµã¼ãã¹ã¨å¹æ
+                            連携サービスと効果
                           </p>
                           <ul className="space-y-1.5">
                             {card.linked.map((item, j) => (
@@ -281,11 +281,11 @@ export default function ProposalPage() {
           </div>
         </section>
 
-        {/* ââ Section 3: Claudeããã®ææ¡ ââ */}
+        {/* ── Section 3: Claudeからの提案 ── */}
         <section ref={sectionRefs[2]} className="scroll-mt-20">
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.4 }}>
-            <h2 className="text-2xl md:text-3xl font-bold text-white mb-2">Claudeããã®ææ¡</h2>
-            <p className="text-slate-400 mb-10">ãã¯ã­ã³ã®æ¥­åå¹çåã­ã¼ãããã</p>
+            <h2 className="text-2xl md:text-3xl font-bold text-white mb-2">Claudeからの提案</h2>
+            <p className="text-slate-400 mb-10">ミクロンの業務効率化ロードマップ</p>
           </motion.div>
 
           {/* Timeline */}
@@ -326,7 +326,7 @@ export default function ProposalPage() {
           <div className="mt-12 text-center">
             <a href="/" className="inline-flex items-center gap-2 text-sm text-blue-400 hover:text-blue-300 transition-colors duration-200">
               <ExternalLink className="w-4 h-4" />
-              AI Ecosystem Map ãè¦ã
+              AI Ecosystem Map を見る
             </a>
           </div>
         </section>
