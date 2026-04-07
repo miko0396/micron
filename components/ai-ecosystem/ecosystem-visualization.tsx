@@ -112,7 +112,7 @@ const nodes: NodeData[] = [
         url: "https://gmail.com",
       },
     ],
-    isComplement: false,
+    isComplement: true,
     claudeStrengths: [
       "APIドキュメントの理解",
       "連携フローの設計",
