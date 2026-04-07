@@ -192,11 +192,11 @@ const nodes: NodeData[] = [
     title: "音声入力・議事録",
     services: [
       {
-        name: "Tl;dv",
-        description: "AI会議アシスタント。Zoom、Google Meet、Microsoft Teamsの会議を自動録画・文字起こし。要約やアクションアイテムを自動抽出。30以上の言語に対応。",
-        pricing: "Pro: $20/月, Business: $59/月",
-        freeTier: "無料プランあり：無制限の録画・文字起こし、AI要約機能付き",
-        url: "https://tldv.io",
+        name: "Tipeless",
+        description: "音声入力特化のAIツール。現場での音声をリアルタイムで文字起こしし、日報・議事録・報告書を自動生成。Notionなど外部サービスへの自動保存にも対応。",
+        pricing: "要問い合わせ",
+        freeTier: "トライアルあり",
+        url: "https://tipeless.com",
       },
     ],
     isComplement: true,
