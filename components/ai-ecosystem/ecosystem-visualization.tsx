@@ -165,7 +165,7 @@ const nodes: NodeData[] = [
   },
   {
     id: 6,
-    title: "アプリ組み込み",
+    title: "アプリ組み込み・API",
     services: [
       {
         name: "Claude API",
@@ -173,20 +173,6 @@ const nodes: NodeData[] = [
         pricing: "Claude 3 Opus: $15/$75 (入力/出力 per 1M tokens), Sonnet: $3/$15, Haiku: $0.25/$1.25",
         freeTier: "新規登録で$5のクレジット付与",
         url: "https://anthropic.com/api",
-      },
-      {
-        name: "Gemini API",
-        description: "Googleのマルチモーダ���AI。テキスト、画像、動画、音声を統合的に処理。100万トークンのコンテキストウィンドウ。",
-        pricing: "Gemini Pro: 無料〜$7/$21 per 1M tokens (使用量による)",
-        freeTier: "無料枠あり：60 RPM、32K TPM",
-        url: "https://ai.google.dev",
-      },
-      {
-        name: "ChatGPT API",
-        description: "OpenAIのAPI。GPT-4、DALL-E、Whisperなど多数のモデルにアクセス。Function calling、JSON mode、ファインチューニングに対応。",
-        pricing: "GPT-4 Turbo: $10/$30 per 1M tokens, GPT-3.5: $0.50/$1.50",
-        freeTier: "新規登録で$5のクレジット付与（3ヶ月有効）",
-        url: "https://openai.com/api",
       },
     ],
     isComplement: false,
