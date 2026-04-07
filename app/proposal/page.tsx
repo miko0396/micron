@@ -389,6 +389,8 @@ export default function ProposalPage() {
   const [activeSection, setActiveSection] = useState(0)
   const [expandedCard, setExpandedCard] = useState<number | null>(null)
   const [activePhase, setActivePhase] = useState(0)
+  const [mounted, setMounted] = useState(false)
+  useEffect(() => { setMounted(true) }, [])
   const sectionRefs = [useRef<HTMLDivElement>(null), useRef<HTMLDivElement>(null), useRef<HTMLDivElement>(null)]
 
   useEffect(() => {
@@ -423,8 +425,8 @@ export default function ProposalPage() {
         }}>
           <div style={{ maxWidth: 1152, margin: "0 auto", padding: "0 32px", height: 56, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
             <motion.span
-              initial={{ opacity: 0, x: -16 }}
-              animate={{ opacity: 1, x: 0 }}
+              initial={false}
+              animate={mounted ? { opacity: 1, x: 0 } : { opacity: 0, x: -16 }}
               style={{ fontSize: 15, fontWeight: 600, color: "var(--color-text)" }}
             >
               株式会社ミクロン × AI活用提案
@@ -469,8 +471,8 @@ export default function ProposalPage() {
 
           {/* ── Hero Stats ── */}
           <motion.div
-            initial={{ opacity: 0, y: 32 }}
-            animate={{ opacity: 1, y: 0 }}
+            initial={false}
+            animate={mounted ? { opacity: 1, y: 0 } : { opacity: 0, y: 32 }}
             transition={{ duration: 0.6 }}
             style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: 16, marginBottom: 64 }}
           >
@@ -481,9 +483,9 @@ export default function ProposalPage() {
             ].map((stat, i) => (
               <motion.div
                 key={i}
-                initial={{ opacity: 0, y: 16 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2 + i * 0.1 }}
+                initial={false}
+                animate={mounted ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 }}
+                transition={{ delay: mounted ? 0.2 + i * 0.1 : 0 }}
                 style={{
                   background: "var(--color-bg-subtle)",
                   border: "1px solid var(--color-border)",
@@ -502,7 +504,7 @@ export default function ProposalPage() {
 
           {/* ── Section 1: AIができること ── */}
           <section ref={sectionRefs[0]} style={{ marginBottom: 96, scrollMarginTop: 80 }}>
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.2 }}>
+            <motion.div initial={false} animate={mounted ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }} transition={{ duration: 0.5, delay: 0.2 }}>
               <h2 style={{ fontSize: 28, fontWeight: 700, color: "var(--color-text)", marginBottom: 4 }}>AIでできること</h2>
               <p style={{ fontSize: 14, color: "var(--color-text-muted)", marginBottom: 32 }}>6つの機能カテゴリ</p>
             </motion.div>
@@ -511,9 +513,9 @@ export default function ProposalPage() {
               {categories.map((cat, i) => (
                 <motion.div
                   key={i}
-                  initial={{ opacity: 0, y: 24 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.4, delay: 0.3 + i * 0.1 }}
+                  initial={false}
+                  animate={mounted ? { opacity: 1, y: 0 } : { opacity: 0, y: 24 }}
+                  transition={{ duration: 0.4, delay: mounted ? 0.3 + i * 0.1 : 0 }}
                 >
                   <TiltCard
                     style={{
@@ -551,7 +553,7 @@ export default function ProposalPage() {
 
           {/* ── Section 2: ミクロンでの活用方法 ── */}
           <section ref={sectionRefs[1]} style={{ marginBottom: 96, scrollMarginTop: 80 }}>
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.2 }}>
+            <motion.div initial={false} animate={mounted ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }} transition={{ duration: 0.5, delay: 0.2 }}>
               <h2 style={{ fontSize: 28, fontWeight: 700, color: "var(--color-text)", marginBottom: 4 }}>株式会社ミクロン × AI</h2>
               <p style={{ fontSize: 14, color: "var(--color-text-muted)", marginBottom: 32 }}>カーソルをかざすと詳細が覗けます</p>
             </motion.div>
@@ -560,9 +562,9 @@ export default function ProposalPage() {
               {usageCards.map((card, i) => (
                 <motion.div
                   key={i}
-                  initial={{ opacity: 0, y: 24 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.4, delay: 0.3 + i * 0.1 }}
+                  initial={false}
+                  animate={mounted ? { opacity: 1, y: 0 } : { opacity: 0, y: 24 }}
+                  transition={{ duration: 0.4, delay: mounted ? 0.3 + i * 0.1 : 0 }}
                 >
                   <PeekCard
                     color={card.color}
@@ -627,7 +629,7 @@ export default function ProposalPage() {
 
           {/* ── Section 3: Claudeからの提案 ── */}
           <section ref={sectionRefs[2]} style={{ scrollMarginTop: 80 }}>
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.2 }}>
+            <motion.div initial={false} animate={mounted ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }} transition={{ duration: 0.5, delay: 0.2 }}>
               <h2 style={{ fontSize: 28, fontWeight: 700, color: "var(--color-text)", marginBottom: 4 }}>Claudeからの提案</h2>
               <p style={{ fontSize: 14, color: "var(--color-text-muted)", marginBottom: 16 }}>ミクロンの業務効率化ロードマップ</p>
             </motion.div>
