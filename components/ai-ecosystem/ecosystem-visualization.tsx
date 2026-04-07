@@ -151,7 +151,7 @@ const nodes: NodeData[] = [
         url: "https://n8n.io",
       },
     ],
-    isComplement: false,
+    isComplement: true,
     claudeStrengths: [
       "ワークフロー設計の最適化",
       "条件分岐ロジックの構築",
@@ -176,7 +176,7 @@ const nodes: NodeData[] = [
       },
       {
         name: "Gemini API",
-        description: "GoogleのマルチモーダルAI。テキスト、画像、動画、音声を統合的に処理。100万トークンのコンテキストウィンドウ。",
+        description: "Googleのマルチモーダ���AI。テキスト、画像、動画、音声を統合的に処理。100万トークンのコンテキストウィンドウ。",
         pricing: "Gemini Pro: 無料〜$7/$21 per 1M tokens (使用量による)",
         freeTier: "無料枠あり：60 RPM、32K TPM",
         url: "https://ai.google.dev",
