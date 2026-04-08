@@ -16,7 +16,7 @@ export interface ServiceInfo {
 const claudeCapabilities = [
   {
     title: "文章作成・要約・レポート",
-    desc: "プロ品質のビジネス生晻、議事録要約、レポート作成を瞬時に生成",
+    desc: "プロ品質のビジネス文書、議事録要約、レポート作成を瞬時に生成",
     examples: ["報告書・提案書", "メール文面", "議事録要約", "プレスリリース"],
   },
   {
@@ -40,8 +40,8 @@ const claudeCapabilities = [
     examples: ["フォーム入力", "Web操作自動化", "スクレイピング", "画面操作代行"],
   },
   {
-    title: "実期実行・スケジュール実行",
-    desc: "タスクの定期自動実行、トリガーベースの処理、バッデ処理",
+    title: "定期実行・スケジュール実行",
+    desc: "タスクの定期自動実行、トリガーベースの処理、バッチ処理",
     examples: ["日次レポート", "定期チェック", "自動通知", "バッチ処理"],
   },
   {
@@ -56,7 +56,7 @@ const claudeCapabilities = [
   },
   {
     title: "メール・ビジネスコミュニケーション",
-    desc: "メール自動作成、返信案生成、ビジネス生書のトーン調整",
+    desc: "メール自動作成、返信案生成、ビジネス文書のトーン調整",
     examples: ["返信下書き", "お詫びメール", "営業メール", "社内連絡"],
   },
   {
@@ -316,7 +316,7 @@ export function EcosystemVisualization() {
             {isLoaded && (
               <motion.div
                 initial={{ scale: 0, opacity: 0 }}
-               animate={{ scale: 1, opacity: 1 }}
+                animate={{ scale: 1, opacity: 1 }}
                 transition={{ type: "spring", stiffness: 200, damping: 20, delay: 0.4 }}
                 style={{ position: "relative", width: 100, height: 100, marginBottom: 16 }}
               >
@@ -369,7 +369,7 @@ export function EcosystemVisualization() {
               </div>
               <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
                 <div style={{ width: 8, height: 8, borderRadius: "50%", background: "#e11d48" }} />
-                <span style={{ fontSize: 11, color: "#475569", fontWeight: 500 }}>苦手を補完</span>
+                <span style={{ fontSize: 11, color: "#475569", fontWeight: 500 }}>苦手を補e��</span>
               </div>
             </div>
           </div>
@@ -386,7 +386,7 @@ export function EcosystemVisualization() {
             >
               <div style={{ width: 10, height: 10, borderRadius: "50%", background: "#e11d48" }} />
               <span style={{ fontSize: 13, fontWeight: 700, color: "#e11d48", letterSpacing: 1, textTransform: "uppercase" }}>
-                苦手を補完
+                苦手を補e��
               </span>
               <span style={{ fontSize: 11, color: "#94a3b8", marginLeft: 4 }}>
                 {complementServices.length} 分野
@@ -403,44 +403,103 @@ export function EcosystemVisualization() {
                   onMouseEnter={() => setHoveredComp(i)}
                   onMouseLeave={() => setHoveredComp(null)}
                   style={{
-                    background: hovere��\OOHH��ٙ��Y������]H���ܙ\��ݙ\�Y��\OOHH��K�\��Y�LLY
-���K�\��Y�L�N����ܙ\��Y]\ΈL��Y[�Έ�MN���[��][ێ��[�\�X\�H�����Y�Έݙ\�Y��\OOHB���
-��ؘJ��K�K
-̋�JH����\��ؘJ�
-H��_B���]��[O^��\�^N���^�[Yے][\Έ��[�\���\�LX\��[����N�
-�_O��]��[O^��Y��ZY����ܙ\��Y]\Έ��X��ܛ�[���[�X\�YܘYY[�
-L�YY��LLY
-ٍٍYJH��\�^N���^�[Yے][\Έ��[�\���\�Y�P�۝[����[�\���^��[�Έ�_O��X�ۈ^�X�ۜ˝��H�^�O^�L�H��܏H��]H�ς��]����[��[O^���۝�^�N�M�۝�ZY��
-�L��܎���YL�L؈�_O�����\�]_B���[����]����[O^���۝�^�N�L���܎��͍
-���[�RZY��K�KX\��[����N�LY[��Y���_O�����\�\��B����]��[O^��\�^N���^��^\�X�[ێ����[[���\�
-�Y[��Y���_O�����\��\��X�\˛X\
+                    background: hoveredComp === i ? "#fff1f2" : "white",
+                    border: hoveredComp === i ? "1.5px solid #e11d48" : "1.5px solid #e2e8f0",
+                    borderRadius: 12,
+                    padding: "14px 18px",
+                    transition: "all 200ms ease",
+                    boxShadow: hoveredComp === i
+                      ? "0 4px 20px rgba(225,29,72,0.1)"
+                      : "0 1px 3px rgba(0,0,0,0.04)",
+                  }}
+                >
+                  <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 6 }}>
+                    <div style={{
+                      width: 28, height: 28, borderRadius: 8,
+                      background: "linear-gradient(135deg, #e11d48, #f43f5e)",
+                      display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0,
+                    }}>
+                      <Icon d={icons.tool} size={13} color="white" />
+                    </div>
+                    <span style={{ fontSize: 14, fontWeight: 650, color: "#1e293b" }}>
+                      {comp.title}
+                    </span>
+                  </div>
+                  <p style={{ fontSize: 12, color: "#64748b", lineHeight: 1.5, marginBottom: 10, paddingLeft: 38 }}>
+                    {comp.desc}
+                  </p>
+                  <div style={{ display: "flex", flexDirection: "column", gap: 6, paddingLeft: 38 }}>
+                    {comp.services.map((service, j) => (
+                      <button
+                        key={j}
+                        onClick={() => setSelectedService(service)}
+                        style={{
+                          display: "flex", alignItems: "center", gap: 8,
+                          padding: "8px 12px", borderRadius: 10,
+                          background: "#fef2f2", border: "1px solid #fecdd3",
+                          cursor: "pointer", textAlign: "left", transition: "all 150ms ease",
+                          width: "100%",
+                        }}
+                        onMouseOver={e => {
+                          (e.currentTarget as HTMLButtonElement).style.background = "#fee2e2";
+                          (e.currentTarget as HTMLButtonElement).style.borderColor = "#fca5a5";
+                        }}
+                        onMouseOut={e => {
+                          (e.currentTarget as HTMLButtonElement).style.background = "#fef2f2";
+                          (e.currentTarget as HTMLButtonElement).style.borderColor = "#fecdd3";
+                        }}
+                      >
+                        <div style={{
+                          width: 32, height: 32, borderRadius: 8,
+                          background: "#e11d48", display: "flex", alignItems: "center", justifyContent: "center",
+                          color: "white", fontSize: 11, fontWeight: 700, flexShrink: 0,
+                        }}>
+                          {service.name.slice(0, 2)}
+                        </div>
+                        <div style={{ flex: 1, minWidth: 0 }}>
+                          <p style={{ fontSize: 12, fontWeight: 600, color: "#1e293b" }}>{service.name}</p>
+                          <p style={{ fontSize: 10, color: "#94a3b8" }}>
+                            {service.freeTier ? "無料枠あり" : "有料"}
+                          </p>
+                        </div>
+                        <Icon d={icons.external} size={12} color="#cbd5e1" />
+                      </button>
+                    ))}
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </div>
 
-�\��X�K�HO�
-��]ۂ��^O^ڟB�ې�X��^�
-HO��]�[X�Y�\��X�J�\��X�J_B��[O^�\�^N���^�[Yے][\Έ��[�\���\��Y[�Έ�L���ܙ\��Y]\ΈL��X��ܛ�[���ٙY������ܙ\���\��YٙX�ȋ��\��܎���[�\��^[Yێ��Y���[��][ێ��[ML\�X\�H���Y��L	H��_B�ۓ[�\�Sݙ\�^�HO�
-K��\��[�\��]\�S�]ۑ[[Y[�
-K��[K��X��ܛ�[�H�ٙYL�L��
-K��\��[�\��]\�S�]ۑ[[Y[�
-K��[K��ܙ\���܈H�٘�MXMH�_B�ۓ[�\�S�]^�HO�
-K��\��[�\��]\�S�]ۑ[[Y[�
-K��[K��X��ܛ�[�H�ٙY�����
-K��\��[�\��]\�S�]ۑ[[Y[�
-K��[K��ܙ\���܈H�ٙX�Ȏ_B���]��[O^��Y�̋ZY��̋�ܙ\��Y]\Έ��X��ܛ�[����LLY
-�\�^N���^�[Yے][\Έ��[�\���\�Y�P�۝[����[�\�����܎���]H��۝�^�N�LK�۝�ZY��
-��^��[�Έ�_O����\��X�K��[YK��X�J�_B��]���]��[O^���^�KZ[��Y�_O���[O^���۝�^�N�L��۝�ZY��
-���܎���YL�L؈�_O���\��X�K��[Y_O����[O^���۝�^�N�L��܎���ML؎�_O����\��X�K���YUY\����(y��y��8�`�࢈����"y��H�B�����]���X�ۈ^�X�ۜ˙^\��[H�^�O^�L�H��܏H��ؙ
-YLH�ς�؝]ۏ��
-J_B��]����[�[ۋ�]���
-J_B��]����]����]�����ʈ���H��H
-��B��\��YY	��
-�[�[ۋ�]��[�]X[^���X�]N�N��_B�[�[X]O^���X�]N�KN�_B��[��][ۏ^��[^N�K��\�][ێ��H_B��[O^�^[Yێ���[�\��X\��[���
-Y[�Έ�M�����X��ܛ�[����]H��ܙ\��Y]\ΈL��ܙ\���\��Y�L�N���X^�Y�
-�X\��[���]]���_B����[O^���۝�^�N�L���܎��͍
-���_O��8�x��8����yd#xस����������fx���j9��za�x���*l��,8ह论*�x�i��cx�o��fB�����[�[ۋ�]���
-_B��]�����ʈ�\��X�H]Z[[�[
-��B�[�[X]T�\�[��O����[X�Y�\��X�H	��
-��\��X�Q]Z[[�[��\��X�O^��[X�Y�\��X�_B�ې���O^�
-HO��]�[X�Y�\��X�J�[
-_B�ς�
-_B��[�[X]T�\�[��O���]���
-B�B
+        {/* Bottom note */}
+        {isLoaded && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1.2, duration: 0.5 }}
+            style={{
+              textAlign: "center", marginTop: 48, padding: "16px 24px",
+              background: "white", borderRadius: 12, border: "1px solid #e2e8f0",
+              maxWidth: 600, margin: "48px auto 0",
+            }}
+          >
+            <p style={{ fontSize: 12, color: "#64748b" }}>
+              サービス名をクリックすると料金・詳細を確認できます
+            </p>
+          </motion.div>
+        )}
+      </div>
+
+      {/* Service Detail Modal */}
+      <AnimatePresence>
+        {selectedService && (
+          <ServiceDetailModal
+            service={selectedService}
+            onClose={() => setSelectedService(null)}
+          />
+        )}
+      </AnimatePresence>
+    </div>
+  )
+}
