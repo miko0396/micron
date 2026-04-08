@@ -2,11 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { ClaudeOrb } from "./claude-orb"
-import { SatelliteNode, type NodeData } from "./satellite-node"
-import { OrbitLines } from "./orbit-lines"
 import { ServiceDetailModal } from "./service-detail-modal"
-import { SidebarDetailPanel } from "./sidebar-detail-panel"
 
 export interface ServiceInfo {
   name: string
@@ -16,368 +12,435 @@ export interface ServiceInfo {
   url: string
 }
 
-const nodes: NodeData[] = [
+/* ─────── Claude ができること (Blue) ─────── */
+const claudeCapabilities = [
   {
-    id: 1,
-    title: "情報処理・知識活用",
+    title: "文章作成・要約・レポート",
+    desc: "プロ品質のビジネス生晻、議事録要約、レポート作成を瞬時に生成",
+    examples: ["報告書・提案書", "メール文面", "議事録要約", "プレスリリース"],
+  },
+  {
+    title: "コーディング・開発支援",
+    desc: "フルスタック開発、デバッグ、コードレビュー、リファクタリング",
+    examples: ["Webアプリ構築", "バグ修正", "テスト生成", "API設計"],
+  },
+  {
+    title: "翻訳・多言語対応",
+    desc: "100以上の言語に対応。ニュアンスを保った自然な翻訳",
+    examples: ["技術文書翻訳", "UI多言語化", "メール翻訳", "マニュアル翻訳"],
+  },
+  {
+    title: "データ分析・構造化",
+    desc: "CSV/Excel解析、統計処理、データの可視化コード生成",
+    examples: ["売上分析", "グラフ生成", "異常値検出", "KPIレポート"],
+  },
+  {
+    title: "ブラウザ・PC操作自動化",
+    desc: "Computer Use機能で画面操作を自動化。クリック、入力、ログインを代行",
+    examples: ["フォーム入力", "Web操作自動化", "スクレイピング", "画面操作代行"],
+  },
+  {
+    title: "実期実行・スケジュール実行",
+    desc: "タスクの定期自動実行、トリガーベースの処理、バッデ処理",
+    examples: ["日次レポート", "定期チェック", "自動通知", "バッチ処理"],
+  },
+  {
+    title: "アプリへのAI組み込み (API)",
+    desc: "Claude API / Ollama / Gemini で社内ツールにAIを統合",
+    examples: ["チャットボット", "社内検索AI", "自動分類", "レコメンド"],
+  },
+  {
+    title: "ドキュメント検索・ナレッジ",
+    desc: "PDF、仕様書、マニュアルから情報を高速検索・抽出",
+    examples: ["仕様書検索", "FAQ自動応答", "社内Wiki検索", "契約書分析"],
+  },
+  {
+    title: "メール・ビジネスコミュニケーション",
+    desc: "メール自動作成、返信案生成、ビジネス生書のトーン調整",
+    examples: ["返信下書き", "お詫びメール", "営業メール", "社内連絡"],
+  },
+  {
+    title: "ワークフロー設計・最適化",
+    desc: "業務フローの分析、ボトルネック特定、自動化戦略の立案",
+    examples: ["業務分析", "フロー設計", "条件分岐", "自動化ルール"],
+  },
+]
+
+/* ─────── 苦手を補完するサービス (Red) ─────── */
+const complementServices = [
+  {
+    title: "リアルタイムWeb検索",
+    desc: "最新ニュース・時事情報のリアルタイム取得",
     services: [
       {
         name: "Perplexity",
         description: "AI検索エンジン。リアルタイムでWeb検索を行い、信頼性の高いソースを引用しながら回答を生成。最新のニュースや研究データにアクセス可能。",
-        pricing: "Pro: $20/月 (GPT-4, Claude対応、無制限Pro検索)",
+        pricing: "Pro: $20/月",
         freeTier: "無料プランあり：1日5回のPro検索、基本検索は無制限",
         url: "https://perplexity.ai",
       },
-      {
-        name: "NotebookLM",
-        description: "Googleの研究支援AI。PDFやドキュメントをアップロードし、その内容に基づいた質問応答、要約、ポッドキャスト音声生成が可能。",
-        pricing: "完全無料（Google Labsの実験プロジェクト）",
-        freeTier: "全機能無料で利用可能。Googleアカウントが必要",
-        url: "https://notebooklm.google.com",
-      },
-    ],
-    isComplement: true,
-    claudeStrengths: [
-      "深い文脈理解と論理的思考",
-      "複雑な概念の分かりやすい説明",
-      "多角的な視点からの分析",
-    ],
-    claudeWeaknesses: [
-      "リアルタイムのWeb検索ができない",
-      "最新ニュースや時事情報を把握できない",
-      "情報のソースURLを提示できない",
     ],
   },
   {
-    id: 2,
-    title: "制作・アウトプット生成",
+    title: "画像・動画生成",
+    desc: "ビジュアルコンテンツの直接生成・編集",
     services: [
       {
-        name: "ChatGPT",
-        description: "OpenAIの対話型AI。テキスト生成、コード作成、画像生成（DALL-E）、データ分析などマルチモーダルな機能を提供。プラグインで機能拡張可能。",
-        pricing: "Plus: $20/月, Team: $25/月/人, Enterprise: 要問合せ",
-        freeTier: "無料プランあり：GPT-3.5無制限、GPT-4は制限付き",
-        url: "https://chat.openai.com",
-      },
-      {
         name: "Canva",
-        description: "オンラインデザインツール。テンプレートベースで誰でも簡単にプロ品質のデザインを作成。AI画像生成、背景削除、動画編集機能も搭載。",
-        pricing: "Pro: $12.99/月, Teams: $14.99/月/人",
-        freeTier: "無料プランあり：基本機能、限定テンプレート、5GBストレージ",
+        description: "テンプレートベースのデザインツール。AI画像生成、背景削除、動画編集機能も搭載。",
+        pricing: "Pro: $12.99/月",
+        freeTier: "無料プランあり：基本機能、限定テンプレート",
         url: "https://canva.com",
       },
       {
         name: "Adobe",
-        description: "クリエイティブソフトウェアの業界標準。Photoshop、Illustrator、Premiere ProにAI機能（Firefly）を統合。商用利用可能な生成AI。",
-        pricing: "Creative Cloud: $54.99/月〜、単体アプリ: $22.99/月〜",
-        freeTier: "7日間無料トライアル、Firefly単体は月25クレジット無料",
+        description: "Photoshop、Illustrator等にAI機能(Firefly)を統合。商用利用可能な生成AI。",
+        pricing: "Creative Cloud: $54.99/月〜",
+        freeTier: "7日間無料トライアル",
         url: "https://adobe.com",
       },
     ],
-    isComplement: true,
-    claudeStrengths: [
-      "クリエイティブブリーフの作成",
-      "コピーライティング",
-      "ストーリーテリング",
-    ],
-    claudeWeaknesses: [
-      "画像・動画の生成ができない",
-      "ビジュアルデザインの直接作成",
-      "フォントやレイアウトの視覚的調整",
-    ],
   },
   {
-    id: 3,
-    title: "外部サービス連携",
-    services: [
-      {
-        name: "Notion",
-        description: "オールインワンのワークスペース。ドキュメント、データベース、Wiki、プロジェクト管理を統合。AI機能で要約や文章生成も可能。",
-        pricing: "Plus: $10/月, Business: $15/月",
-        freeTier: "無料プランあり：個人利用無制限、ゲスト10人まで",
-        url: "https://notion.so",
-      },
-      {
-        name: "Canva",
-        description: "オンラインデザインツール。テンプレートベースで誰でも簡単にプロ品質のデザインを作成。AI画像生成、背景削除、動画編集機能も搭載。",
-        pricing: "Pro: $12.99/月, Teams: $14.99/月/人",
-        freeTier: "無料プランあり：基本機能、限定テンプレート、5GBストレージ",
-        url: "https://canva.com",
-      },
-      {
-        name: "Gmail",
-        description: "Googleの無料メールサービス。15GBの無料ストレージ、強力なスパムフィルター、Google Workspaceとの統合。Gemini AIによるメール作成支援も。",
-        pricing: "Google Workspace: $6/月/人〜",
-        freeTier: "個人利用は完全無料：15GBストレージ、基本機能すべて",
-        url: "https://gmail.com",
-      },
-    ],
-    isComplement: true,
-    claudeStrengths: [
-      "APIドキュメントの理解",
-      "連携フローの設計",
-      "エラーハンドリング提案",
-    ],
-    claudeWeaknesses: [
-      "直接外部サービスを操作できない",
-      "OAuth認証フローの実行",
-      "リアルタイムデータ同期",
-    ],
-  },
-  {
-    id: 4,
-    title: "ブラウザ・PC操作自動化",
-    services: [],
-    isComplement: false,
-    claudeStrengths: [
-      "Computer Use機能による画面操作",
-      "ブラウザ自動化スクリプト生成",
-      "エラー検出と自己修正",
-      "複雑なPC操作を自然言語で指示",
-    ],
-    claudeWeaknesses: [
-      "（この領域はClaude単体でほぼ完結）",
-    ],
-  },
-  {
-    id: 5,
-    title: "タスク自動化・エージェント",
-    services: [
-      {
-        name: "N8N",
-        description: "セルフホスト可能なワークフロー自動化。400以上のノードでカスタムコード実行も可能。データプライバシーを重視する企業に人気。",
-        pricing: "Cloud: €20/月〜、Self-hosted: 無料",
-        freeTier: "セルフホスト版は完全無料、Cloud版は14日間トライアル",
-        url: "https://n8n.io",
-      },
-    ],
-    isComplement: true,
-    claudeStrengths: [
-      "ワークフロー設計の最適化",
-      "条件分岐ロジックの構築",
-      "自然言語からの自動化ルール生成",
-    ],
-    claudeWeaknesses: [
-      "定期実行・スケジュール実行",
-      "外部トリガーによる自動起動",
-      "永続的なバックグラウンド処理",
-    ],
-  },
-  {
-    id: 6,
-    title: "アプリ組み込み・API",
-    services: [
-      {
-        name: "Claude API",
-        description: "Anthropicの公式API。200Kトークンの長いコンテキスト、優れたコード生成能力、安全性を重視した設計。構造化出力にも対応。",
-        pricing: "Claude 3 Opus: $15/$75 (入力/出力 per 1M tokens), Sonnet: $3/$15, Haiku: $0.25/$1.25",
-        freeTier: "新規登録で$5のクレジット付与",
-        url: "https://anthropic.com/api",
-      },
-    ],
-    isComplement: false,
-    claudeStrengths: [
-      "200Kトークンの長文コンテキスト",
-      "高度なコード生成能力",
-      "構造化出力 (JSON, XML)",
-    ],
-    claudeWeaknesses: [
-      "（競合APIと比較して）画像生成なし",
-      "音声合成・音声認識なし",
-      "リアルタイム検索機能なし",
-    ],
-  },
-  {
-    id: 7,
-    title: "音声入力・議事録",
+    title: "音声認識・文字起こし",
+    desc: "リアルタイム音声入力と話者識別",
     services: [
       {
         name: "Tipeless",
-        description: "音声入力特化のAIツール。現場での音声をリアルタイムで文字起こしし、日報・議事録・報告書を自動生成。Notionなど外部サービスへの自動保存にも対応。",
+        description: "音声入力特化のAIツール。現場での音声をリアルタイムで文字起こしし、日報・議事録・報告書を自動生成。",
         pricing: "要問い合わせ",
         freeTier: "トライアルあり",
         url: "https://tipeless.com",
       },
     ],
-    isComplement: true,
-    claudeStrengths: [
-      "議事録の構造化と要約",
-      "アクションアイテム抽出",
-      "フォローアップメール生成",
+  },
+  {
+    title: "ナレッジベース・Wiki",
+    desc: "チーム情報の集約・構造化・共有",
+    services: [
+      {
+        name: "Notion",
+        description: "ドキュメント、データベース、Wiki、プロジェクト管理を統合。AI機能で要約や文章生成も可能。",
+        pricing: "Plus: $10/月",
+        freeTier: "無料プランあり：個人利用無制限",
+        url: "https://notion.so",
+      },
+      {
+        name: "NotebookLM",
+        description: "Googleの研究支援AI。PDFをアップロードし、質問応答、要約、ポッドキャスト音声生成が可能。",
+        pricing: "完全無料",
+        freeTier: "全機能無料。Googleアカウントが必要",
+        url: "https://notebooklm.google.com",
+      },
     ],
-    claudeWeaknesses: [
-      "音声の直接認識・文字起こし",
-      "リアルタイム会議参加",
-      "話者識別・タイムスタンプ付与",
+  },
+  {
+    title: "ワークフロー自動化基盤",
+    desc: "外部トリガー連携・永続バックグラウンド処理",
+    services: [
+      {
+        name: "N8N",
+        description: "セルフホスト可能なワークフロー自動化。400以上のノードでカスタムコード実行も可能。",
+        pricing: "Cloud: €20/月〜",
+        freeTier: "セルフホスト版は完全無料",
+        url: "https://n8n.io",
+      },
+    ],
+  },
+  {
+    title: "AI API（代替・併用）",
+    desc: "用途に応じて使い分けるAI API群",
+    services: [
+      {
+        name: "Ollama",
+        description: "ローカルで動作するオープンソースLLM実行環境。Llama、Mistral等のモデルをプライベート環境で実行可能。データを外部に送信しない。",
+        pricing: "完全無料（オープンソース）",
+        freeTier: "全機能無料。ローカルGPU推奨",
+        url: "https://ollama.com",
+      },
+      {
+        name: "Gemini",
+        description: "Google DeepMindのマルチモーダルAI。テキスト・画像・動画・音声を統合的に処理。Google Workspace連携が強力。",
+        pricing: "Gemini Advanced: $19.99/月（Google One AI Premium）",
+        freeTier: "無料プランあり：Gemini 1.5 Flash利用可能",
+        url: "https://gemini.google.com",
+      },
     ],
   },
 ]
 
+/* ─────── SVG Icons ─────── */
+const icons: Record<string, string> = {
+  check: "M20 6L9 17l-5-5",
+  sparkle: "M12 2l2.4 7.2L22 12l-7.6 2.8L12 22l-2.4-7.2L2 12l7.6-2.8z",
+  tool: "M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z",
+  link: "M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71",
+  chevronRight: "M9 18l6-6-6-6",
+  external: "M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3",
+}
+
+function Icon({ d, size = 16, color = "currentColor" }: { d: string; size?: number; color?: string }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d={d} />
+    </svg>
+  )
+}
+
 export function EcosystemVisualization() {
-  const [selectedNode, setSelectedNode] = useState<NodeData | null>(null)
   const [selectedService, setSelectedService] = useState<ServiceInfo | null>(null)
-  const [dimensions, setDimensions] = useState({ width: 0, height: 0 })
+  const [hoveredCap, setHoveredCap] = useState<number | null>(null)
+  const [hoveredComp, setHoveredComp] = useState<number | null>(null)
   const [isLoaded, setIsLoaded] = useState(false)
 
-  useEffect(() => {
-    const updateDimensions = () => {
-      setDimensions({
-        width: window.innerWidth,
-        height: window.innerHeight,
-      })
-    }
-    updateDimensions()
-    setIsLoaded(true)
-    window.addEventListener("resize", updateDimensions)
-    return () => window.removeEventListener("resize", updateDimensions)
-  }, [])
-
-  // Adjust radius based on whether sidebar is open
-  const baseRadius = Math.min(dimensions.width * 0.65, dimensions.height) * 0.32
-  const radius = selectedNode ? baseRadius * 0.85 : baseRadius
-
-  const handleServiceClick = (service: ServiceInfo) => {
-    setSelectedService(service)
-  }
-
-  const handleNodeSelect = (node: NodeData) => {
-    setSelectedNode(selectedNode?.id === node.id ? null : node)
-  }
+  useEffect(() => { setIsLoaded(true) }, [])
 
   return (
-    <div className="relative w-full min-h-screen overflow-hidden bg-neutral-50">
+    <div className="relative w-full min-h-screen overflow-hidden" style={{ background: "#f8fafc" }}>
       {/* Subtle grid background */}
       <div
         className="absolute inset-0 opacity-30"
         style={{
-          backgroundImage: `
-            linear-gradient(rgba(0,0,0,0.03) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(0,0,0,0.03) 1px, transparent 1px)
-          `,
+          backgroundImage: `linear-gradient(rgba(0,0,0,0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.02) 1px, transparent 1px)`,
           backgroundSize: "40px 40px",
         }}
       />
 
-      {/* Soft gradient accents */}
+      {/* Blue gradient accent - more prominent */}
       <div
         className="absolute inset-0 pointer-events-none"
         style={{
           background: `
-            radial-gradient(ellipse at 20% 20%, rgba(99,102,241,0.05) 0%, transparent 50%),
-            radial-gradient(ellipse at 80% 80%, rgba(244,63,94,0.05) 0%, transparent 50%)
+            radial-gradient(ellipse at 25% 30%, rgba(37,99,235,0.06) 0%, transparent 60%),
+            radial-gradient(ellipse at 75% 70%, rgba(244,63,94,0.04) 0%, transparent 50%)
           `,
         }}
       />
 
-      {/* Title */}
-      <motion.div
-        className="absolute top-8 left-0 right-0 text-center z-20"
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.3, duration: 0.6 }}
-      >
-        <h1 className="text-3xl md:text-4xl font-bold text-neutral-800 mb-2">
-          AI Ecosystem Map
-        </h1>
-        <p className="text-neutral-500 text-sm md:text-base">
-          Claude を中心としたAIツール連携マップ
-        </p>
-      </motion.div>
-
-      {/* Legend */}
-      <motion.div
-        className="absolute bottom-8 left-8 z-20 flex flex-col gap-2 bg-white/80 backdrop-blur-sm rounded-lg p-4 shadow-sm border border-neutral-200"
-        initial={{ opacity: 0, x: -20 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ delay: 0.8, duration: 0.5 }}
-      >
-        <div className="flex items-center gap-2">
-          <div className="w-3 h-3 rounded-full bg-indigo-500" />
-          <span className="text-xs text-neutral-600">Claude Native</span>
-        </div>
-        <div className="flex items-center gap-2">
-          <div className="w-3 h-3 rounded-full bg-rose-500" />
-          <span className="text-xs text-neutral-600">苦手を補完</span>
-        </div>
-      </motion.div>
-
-      {/* Main visualization container */}
+      {/* Header */}
       {isLoaded && (
-        <motion.div 
-          className="absolute inset-0 flex items-center justify-center"
-          animate={{
-            x: selectedNode ? -160 : 0,
-          }}
-          transition={{ type: "spring", stiffness: 200, damping: 25 }}
+        <motion.div
+          className="relative z-10 text-center pt-10 pb-6"
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2, duration: 0.5 }}
         >
-          {/* Orbit lines SVG layer */}
-          <OrbitLines nodes={nodes} radius={radius} selectedNode={selectedNode} />
-
-          {/* Center Claude orb */}
-          <motion.div
-            className="absolute z-30"
-            initial={{ scale: 0, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{
-              type: "spring",
-              stiffness: 200,
-              damping: 20,
-              delay: 0.2,
-            }}
-          >
-            <ClaudeOrb />
-          </motion.div>
-
-          {/* Satellite nodes */}
-          {nodes.map((node, index) => {
-            const angle = (index * 2 * Math.PI) / nodes.length - Math.PI / 2
-            return (
-              <SatelliteNode
-                key={node.id}
-                node={node}
-                angle={angle}
-                radius={radius}
-                index={index}
-                onSelect={handleNodeSelect}
-                isSelected={selectedNode?.id === node.id}
-                onServiceClick={handleServiceClick}
-              />
-            )
-          })}
+          <h1 style={{ fontSize: 32, fontWeight: 800, color: "#1e293b", marginBottom: 6 }}>
+            AI Ecosystem Map
+          </h1>
+          <p style={{ fontSize: 14, color: "#64748b" }}>
+            Claude を中心としたAI活用 — できることの全体像
+          </p>
         </motion.div>
       )}
 
-      {/* Instructions */}
-      <motion.div
-        className="absolute bottom-8 right-8 z-20 text-right bg-white/80 backdrop-blur-sm rounded-lg p-4 shadow-sm border border-neutral-200"
-        initial={{ opacity: 0, x: 20 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ delay: 1, duration: 0.5 }}
-      >
-        <p className="text-xs text-neutral-500">ノードをクリックして詳細を表示</p>
-        <p className="text-xs text-neutral-400">サービス名クリックで料金確認</p>
-      </motion.div>
+      {/* Main two-column layout */}
+      <div style={{ maxWidth: 1280, margin: "0 auto", padding: "0 24px 64px", position: "relative", zIndex: 1 }}>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr auto 1fr", gap: 0, alignItems: "start" }}>
 
-      {/* Sidebar Detail Panel */}
-      <AnimatePresence>
-        {selectedNode && (
-          <SidebarDetailPanel
-            node={selectedNode}
-            onClose={() => setSelectedNode(null)}
-            onServiceClick={handleServiceClick}
-          />
-        )}
-      </AnimatePresence>
+          {/* ─── LEFT: Claude Capabilities (BLUE) ─── */}
+          <div>
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              animate={isLoaded ? { opacity: 1, x: 0 } : {}}
+              transition={{ delay: 0.3, duration: 0.5 }}
+              style={{
+                display: "flex", alignItems: "center", gap: 10, marginBottom: 20, padding: "0 8px",
+              }}
+            >
+              <div style={{ width: 10, height: 10, borderRadius: "50%", background: "#2563eb" }} />
+              <span style={{ fontSize: 13, fontWeight: 700, color: "#2563eb", letterSpacing: 1, textTransform: "uppercase" }}>
+                Claude ができること
+              </span>
+              <span style={{ fontSize: 11, color: "#94a3b8", marginLeft: 4 }}>
+                {claudeCapabilities.length} 分野
+              </span>
+            </motion.div>
 
-      {/* Service Detail Modal */}
-      <AnimatePresence>
-        {selectedService && (
-          <ServiceDetailModal
-            service={selectedService}
-            onClose={() => setSelectedService(null)}
-          />
-        )}
-      </AnimatePresence>
-    </div>
-  )
-}
+            <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+              {claudeCapabilities.map((cap, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, x: -30 }}
+                  animate={isLoaded ? { opacity: 1, x: 0 } : {}}
+                  transition={{ delay: 0.3 + i * 0.06, duration: 0.4 }}
+                  onMouseEnter={() => setHoveredCap(i)}
+                  onMouseLeave={() => setHoveredCap(null)}
+                  style={{
+                    background: hoveredCap === i ? "#eff6ff" : "white",
+                    border: hoveredCap === i ? "1.5px solid #2563eb" : "1.5px solid #e2e8f0",
+                    borderRadius: 12,
+                    padding: "14px 18px",
+                    cursor: "default",
+                    transition: "all 200ms ease",
+                    boxShadow: hoveredCap === i
+                      ? "0 4px 20px rgba(37,99,235,0.12)"
+                      : "0 1px 3px rgba(0,0,0,0.04)",
+                  }}
+                >
+                  <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 4 }}>
+                    <div style={{
+                      width: 28, height: 28, borderRadius: 8,
+                      background: "linear-gradient(135deg, #2563eb, #3b82f6)",
+                      display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0,
+                    }}>
+                      <Icon d={icons.check} size={14} color="white" />
+                    </div>
+                    <span style={{ fontSize: 14, fontWeight: 650, color: "#1e293b" }}>
+                      {cap.title}
+                    </span>
+                  </div>
+                  <p style={{ fontSize: 12, color: "#64748b", lineHeight: 1.5, marginBottom: 8, paddingLeft: 38 }}>
+                    {cap.desc}
+                  </p>
+                  <div style={{ display: "flex", flexWrap: "wrap", gap: 5, paddingLeft: 38 }}>
+                    {cap.examples.map((ex, j) => (
+                      <span
+                        key={j}
+                        style={{
+                          fontSize: 10, fontWeight: 500, padding: "2px 8px", borderRadius: 100,
+                          background: "#dbeafe", color: "#1d4ed8", border: "1px solid #bfdbfe",
+                        }}
+                      >
+                        {ex}
+                      </span>
+                    ))}
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+
+          {/* ─── CENTER: Claude Orb ─── */}
+          <div style={{ display: "flex", flexDirection: "column", alignItems: "center", padding: "60px 24px 0", position: "sticky", top: 80 }}>
+            {isLoaded && (
+              <motion.div
+                initial={{ scale: 0, opacity: 0 }}
+               animate={{ scale: 1, opacity: 1 }}
+                transition={{ type: "spring", stiffness: 200, damping: 20, delay: 0.4 }}
+                style={{ position: "relative", width: 100, height: 100, marginBottom: 16 }}
+              >
+                {/* Glow */}
+                <motion.div
+                  style={{
+                    position: "absolute", inset: -12, borderRadius: "50%",
+                    background: "radial-gradient(circle, rgba(99,102,241,0.15) 0%, transparent 70%)",
+                  }}
+                  animate={{ scale: [1, 1.15, 1], opacity: [0.5, 0.8, 0.5] }}
+                  transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+                />
+                {/* Rotating ring */}
+                <motion.div
+                  style={{
+                    position: "absolute", inset: -4, borderRadius: "50%",
+                    border: "2px dashed rgba(99,102,241,0.3)",
+                  }}
+                  animate={{ rotate: 360 }}
+                  transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+                />
+                {/* Core */}
+                <motion.div
+                  style={{
+                    width: 100, height: 100, borderRadius: "50%",
+                    background: "linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #a855f7 100%)",
+                    boxShadow: "0 8px 30px rgba(99,102,241,0.3)",
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                  }}
+                  animate={{ scale: [1, 1.03, 1] }}
+                  transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                >
+                  <span style={{ fontSize: 14, fontWeight: 700, color: "white", letterSpacing: 1 }}>Claude</span>
+                </motion.div>
+              </motion.div>
+            )}
+
+            {/* Connector lines */}
+            <div style={{ display: "flex", alignItems: "center", gap: 16, marginTop: 8 }}>
+              <div style={{ width: 40, height: 2, background: "linear-gradient(to left, transparent, #2563eb)", borderRadius: 2 }} />
+              <div style={{ width: 8, height: 8, borderRadius: "50%", background: "#6366f1" }} />
+              <div style={{ width: 40, height: 2, background: "linear-gradient(to right, transparent, #e11d48)", borderRadius: 2 }} />
+            </div>
+
+            {/* Legend */}
+            <div style={{ marginTop: 24, textAlign: "center" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 8 }}>
+                <div style={{ width: 8, height: 8, borderRadius: "50%", background: "#2563eb" }} />
+                <span style={{ fontSize: 11, color: "#475569", fontWeight: 500 }}>Claude Native</span>
+              </div>
+              <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                <div style={{ width: 8, height: 8, borderRadius: "50%", background: "#e11d48" }} />
+                <span style={{ fontSize: 11, color: "#475569", fontWeight: 500 }}>苦手を補完</span>
+              </div>
+            </div>
+          </div>
+
+          {/* ─── RIGHT: Complement Services (RED) ─── */}
+          <div>
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              animate={isLoaded ? { opacity: 1, x: 0 } : {}}
+              transition={{ delay: 0.3, duration: 0.5 }}
+              style={{
+                display: "flex", alignItems: "center", gap: 10, marginBottom: 20, padding: "0 8px",
+              }}
+            >
+              <div style={{ width: 10, height: 10, borderRadius: "50%", background: "#e11d48" }} />
+              <span style={{ fontSize: 13, fontWeight: 700, color: "#e11d48", letterSpacing: 1, textTransform: "uppercase" }}>
+                苦手を補完
+              </span>
+              <span style={{ fontSize: 11, color: "#94a3b8", marginLeft: 4 }}>
+                {complementServices.length} 分野
+              </span>
+            </motion.div>
+
+            <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+              {complementServices.map((comp, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, x: 30 }}
+                  animate={isLoaded ? { opacity: 1, x: 0 } : {}}
+                  transition={{ delay: 0.4 + i * 0.08, duration: 0.4 }}
+                  onMouseEnter={() => setHoveredComp(i)}
+                  onMouseLeave={() => setHoveredComp(null)}
+                  style={{
+                    background: hovere��\OOHH��ٙ��Y������]H���ܙ\��ݙ\�Y��\OOHH��K�\��Y�LLY
+���K�\��Y�L�N����ܙ\��Y]\ΈL��Y[�Έ�MN���[��][ێ��[�\�X\�H�����Y�Έݙ\�Y��\OOHB���
+��ؘJ��K�K
+̋�JH����\��ؘJ�
+H��_B���]��[O^��\�^N���^�[Yے][\Έ��[�\���\�LX\��[����N�
+�_O��]��[O^��Y��ZY����ܙ\��Y]\Έ��X��ܛ�[���[�X\�YܘYY[�
+L�YY��LLY
+ٍٍYJH��\�^N���^�[Yے][\Έ��[�\���\�Y�P�۝[����[�\���^��[�Έ�_O��X�ۈ^�X�ۜ˝��H�^�O^�L�H��܏H��]H�ς��]����[��[O^���۝�^�N�M�۝�ZY��
+�L��܎���YL�L؈�_O�����\�]_B���[����]����[O^���۝�^�N�L���܎��͍
+���[�RZY��K�KX\��[����N�LY[��Y���_O�����\�\��B����]��[O^��\�^N���^��^\�X�[ێ����[[���\�
+�Y[��Y���_O�����\��\��X�\˛X\
+
+�\��X�K�HO�
+��]ۂ��^O^ڟB�ې�X��^�
+HO��]�[X�Y�\��X�J�\��X�J_B��[O^�\�^N���^�[Yے][\Έ��[�\���\��Y[�Έ�L���ܙ\��Y]\ΈL��X��ܛ�[���ٙY������ܙ\���\��YٙX�ȋ��\��܎���[�\��^[Yێ��Y���[��][ێ��[ML\�X\�H���Y��L	H��_B�ۓ[�\�Sݙ\�^�HO�
+K��\��[�\��]\�S�]ۑ[[Y[�
+K��[K��X��ܛ�[�H�ٙYL�L��
+K��\��[�\��]\�S�]ۑ[[Y[�
+K��[K��ܙ\���܈H�٘�MXMH�_B�ۓ[�\�S�]^�HO�
+K��\��[�\��]\�S�]ۑ[[Y[�
+K��[K��X��ܛ�[�H�ٙY�����
+K��\��[�\��]\�S�]ۑ[[Y[�
+K��[K��ܙ\���܈H�ٙX�Ȏ_B���]��[O^��Y�̋ZY��̋�ܙ\��Y]\Έ��X��ܛ�[����LLY
+�\�^N���^�[Yے][\Έ��[�\���\�Y�P�۝[����[�\�����܎���]H��۝�^�N�LK�۝�ZY��
+��^��[�Έ�_O����\��X�K��[YK��X�J�_B��]���]��[O^���^�KZ[��Y�_O���[O^���۝�^�N�L��۝�ZY��
+���܎���YL�L؈�_O���\��X�K��[Y_O����[O^���۝�^�N�L��܎���ML؎�_O����\��X�K���YUY\����(y��y��8�`�࢈����"y��H�B�����]���X�ۈ^�X�ۜ˙^\��[H�^�O^�L�H��܏H��ؙ
+YLH�ς�؝]ۏ��
+J_B��]����[�[ۋ�]���
+J_B��]����]����]�����ʈ���H��H
+��B��\��YY	��
+�[�[ۋ�]��[�]X[^���X�]N�N��_B�[�[X]O^���X�]N�KN�_B��[��][ۏ^��[^N�K��\�][ێ��H_B��[O^�^[Yێ���[�\��X\��[���
+Y[�Έ�M�����X��ܛ�[����]H��ܙ\��Y]\ΈL��ܙ\���\��Y�L�N���X^�Y�
+�X\��[���]]���_B����[O^���۝�^�N�L���܎��͍
+���_O��8�x��8����yd#xस����������fx���j9��za�x���*l��,8ह论*�x�i��cx�o��fB�����[�[ۋ�]���
+_B��]�����ʈ�\��X�H]Z[[�[
+��B�[�[X]T�\�[��O����[X�Y�\��X�H	��
+��\��X�Q]Z[[�[��\��X�O^��[X�Y�\��X�_B�ې���O^�
+HO��]�[X�Y�\��X�J�[
+_B�ς�
+_B��[�[X]T�\�[��O���]���
+B�B
