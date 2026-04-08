@@ -88,13 +88,13 @@ interface AiCapability {
   examples: string[]
 }
 
-/* ──────────────────────── Data ───────────────────────── */
+/* ───────────────────────── Data ───────────────────────── */
 const capabilities: AiCapability[] = [
   {
-    num: "01", title: "文書作成・情報整理",
+    num: "01", title: "文書作成ヶ情報整理",
     description: "報告書、議事録、提案書、メール文面を瞬時に生成。社内の情報を構造化して再利用可能に。",
     iconKey: "file", color: "#2563eb", bgColor: "#eff6ff",
-    examples: ["報告書の自動ドラフト", "議事録の要約・整形", "篾内ナレッジの検索・抽出"],
+    examples: ["報告書の自動ドラフト", "議事録の要約・整形", "社内ナレッジの検索・抽出"],
   },
   {
     num: "02", title: "データ分析・可視化",
@@ -116,7 +116,7 @@ const capabilities: AiCapability[] = [
   },
   {
     num: "05", title: "コーディング・開発",
-    description: "アプリ開発、バグ修正、コードレビュー、テスト生成まで。フルスタック対応。",
+    description: "アプリ開癴、バグ修正、コードレビュー、テスト生成まで。フルスタック対応。",
     iconKey: "code", color: "#7c3aed", bgColor: "#f5f3ff",
     examples: ["Webアプリの構築", "APIの設計・実装", "自動テストの生成"],
   },
@@ -134,7 +134,7 @@ const useCases: UseCase[] = [
     title: "図面・仕様書の検索と管理",
     pain: "過去の図面を探すのに毎回30分以上かかる。英語の仕様書は読むだけで半日。",
     solution: "AIが社内文書を横断検索し、要約・翻訳を即座に実行。",
-    claudeRole: "PDF・Wordの内容を瞬時に要約、英語仕様書を自然な日本語に翻訳、変更点を自動検出",
+    claudeRole: "PDF・Wordの内容を瞬時で要約、英語仕様書を自然な日本語に翻訳、変更点を自動検出",
     tools: ["Notion", "NotebookLM"],
     impact: "検索時間 90%削減、翻訳コスト 80%削減",
     iconKey: "clipboard", color: "#2563eb", bgColor: "#eff6ff",
@@ -172,7 +172,7 @@ const useCases: UseCase[] = [
   {
     id: "voice", category: "音声活用",
     title: "会議・現場音声の自動議事録化",
-    pain: "会議の議事録保は内容に集中できない。現場の口頭報告は記録に残らない。",
+    pain: "会議の議事録係は内容に集中できない。現場の口頭報告は記録に残らない。",
     solution: "録音するだけで文字起こし→要約→アクションアイテム抽出→Notionに自動保存。",
     claudeRole: "文字起こしテキストの整形・要約、アクションアイテムの自動抽出、議事録フォーマットへの変換",
     tools: ["Tipeless", "Notion"],
@@ -183,7 +183,7 @@ const useCases: UseCase[] = [
     id: "plan", category: "計画・管理",
     title: "生産計画・工程管理の最適化",
     pain: "工程間の依存関係が複雑で、ボトルネックの特定が属人化。計画変更のたびに全体調整。",
-    solution: "AIが生産データからボトルネックを特定し、工程の最適化を提案。",
+    solution: "AIが生産データからボトルネックを特定し、工答の最適化を提案。",
     claudeRole: "生産データからボトルネックを特定、作業指示書の自動生成、工程間の依存関係を分析",
     tools: ["Notion (ダッシュボード)", "N8N (通知)"],
     impact: "計画策定時間 70%削減、工程遅延 50%削減",
@@ -193,7 +193,6 @@ const useCases: UseCase[] = [
 
 const whyClaude = [
   {
-    title: "日本語の品�
     title: "日本語の品質が圧倒的",
     description: "ビジネス文書に必要な正確さと自然さ。敬語・専門用語も的確に扱える。",
     iconKey: "file" as const, color: "#2563eb",
@@ -436,7 +435,7 @@ export default function UseCasesPage() {
           <Section id="capabilities">
             <h2 style={{ fontSize: 22, fontWeight: 600, marginBottom: 8 }}>AIができること</h2>
             <p style={{ fontSize: 14, color: "var(--color-text-muted)", marginBottom: 32 }}>
-              現在のAI技蠓で実現可能な6つの領域。すべて今日から導入を開始できます。
+              現在のAI技術で実現可能な6つの領域。すべて今日から導入を開始できます。
             </p>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))", gap: 16 }}>
               {capabilities.map((cap, i) => (
@@ -761,7 +760,7 @@ export default function UseCasesPage() {
               border: "1px solid var(--color-border)",
             }}
           >
-            <h2 style={{ fontSize: 22, fontWeight: 600, margin: "0 0 8px" }}>ま�Zは小さく始めてみませんか？</h2>
+            <h2 style={{ fontSize: 22, fontWeight: 600, margin: "0 0 8px" }}>まずは小さく始めてみませんか？</h2>
             <p style={{ fontSize: 14, color: "var(--color-text-muted)", margin: "0 0 24px" }}>
               Claude の無料プランで、文書要約・翻訳・メールドラフトから試行できます。
             </p>
