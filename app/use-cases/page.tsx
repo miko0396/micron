@@ -1,4 +1,37 @@
-H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2zM16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2",
+"use client"
+
+import { useState, useEffect, useRef, useCallback } from "react"
+import { motion, AnimatePresence, useMotionValue, useTransform, useSpring } from "framer-motion"
+
+/* ───────────────────────── SVG Icon ───────────────────────── */
+const Icon = ({ d, size = 20, color = "currentColor" }: { d: string; size?: number; color?: string }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d={d} /></svg>
+)
+
+const icons = {
+  search: "M11 11m-8 0a8 8 0 1 0 16 0 8 8 0 1 0 -16 0M21 21l-4.35-4.35",
+  file: "M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8zM14 2v6h6",
+  globe: "M12 12m-10 0a10 10 0 1 0 20 0 10 10 0 1 0 -20 0M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10",
+  monitor: "M2 3h20v14H2zM8 21h8M12 17v4",
+  zap: "M13 2L3 14h9l-1 8 10-12h-9l1-8",
+  code: "M16 18l6-6-6-6M8 6l-6 6 6 6",
+  clipboard: "M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v0a2 2 0 0 1-2 2h-2a2 2 0 0 1-2-2z",
+  chart: "M18 20V10M12 20V4M6 20v-6",
+  cart: "M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6",
+  settings: "M12 12m-3 0a3 3 0 1 0 6 0 3 3 0 1 0 -6 0",
+  clock: "M12 12m-10 0a10 10 0 1 0 20 0 10 10 0 1 0 -20 0M12 6v6l4 2",
+  mic: "M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3zM19 10v2a7 7 0 0 1-14 0v-2M12 19v4M8 23h8",
+  chevronRight: "M9 18l6-6-6-6",
+  arrowRight: "M5 12h14M12 5l7 7-7 7",
+  check: "M20 6L9 17l-5-5",
+  sparkle: "M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83",
+  play: "M5 3l14 9-14 9V3z",
+  user: "M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2M12 7m-4 0a4 4 0 1 0 8 0 4 4 0 1 0-8 0",
+  trendUp: "M23 6l-9.5 9.5-5-5L1 18M17 6h6v6",
+  shield: "M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z",
+  layers: "M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5",
+  target: "M12 12m-10 0a10 10 0 1 0 20 0 10 10 0 1 0-20 0M12 12m-6 0a6 6 0 1 0 12 0 6 6 0 1 0-12 0M12 12m-2 0a2 2 0 1 0 4 0 2 2 0 1 0-4 0",
+  briefcase: "M20 7H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2zM16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2",
   lightbulb: "M9 18h6M10 22h4M12 2a7 7 0 0 0-4 12.7V17h8v-2.3A7 7 0 0 0 12 2z",
 }
 
@@ -30,39 +63,62 @@ const cssVars = `
   .fade-up-6 { animation: fadeUp 0.5s ease 0.6s forwards; opacity: 0; }
 `
 
-/* ───────────────────────── Types ───────────────────H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2zM16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2",
-  lightbulb: "M9 18h6M10 22h4M12 2a7 7 0 0 0-4 12.7V17h8v-2.3A7 7 0 0 0 12 2z",
+/* ───────────────────────── Types ───────────────────────── */
+interface UseCase {
+  id: string
+  category: string
+  title: string
+  pain: string
+  solution: string
+  claudeRole: string
+  tools: string[]
+  impact: string
+  iconKey: keyof typeof icons
+  color: string
+  bgColor: string
 }
 
-/* ───────────────────────── CSS Variables ───────────────────────── */
-const cssVars = `
-  :root {
-    --color-bg: #ffffff;
-    --color-bg-subtle: #f9fafb;
-    --color-bg-muted: #f3f4f6;
-    --color-border: #e5e7eb;
-    --color-border-strong: #d1d5db;
-    --color-text: #111827;
-    --color-text-muted: #6b7280;
-    --color-text-faint: #9ca3af;
-    --color-primary: #2563eb;
-    --color-primary-hover: #1d4ed8;
-  }
-  * { box-sizing: border-box; }
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-  .fade-up { animation: fadeUp 0.5s ease forwards; }
-  .fade-up-1 { animation: fadeUp 0.5s ease 0.1s forwards; opacity: 0; }
-  .fade-up-2 { animation: fadeUp 0.5s ease 0.2s forwards; opacity: 0; }
-  .fade-up-3 { animation: fadeUp 0.5s ease 0.3s forwards; opacity: 0; }
-  .fade-up-4 { animation: fadeUp 0.5s ease 0.4s forwards; opacity: 0; }
-  .fade-up-5 { animation: fadeUp 0.5s ease 0.5s forwards; opacity: 0; }
-  .fade-up-6 { animation: fadeUp 0.5s ease 0.6s forwards; opacity: 0; }
-`
+interface AiCapability {
+  num: string
+  title: string
+  description: string
+  iconKey: keyof typeof icons
+  color: string
+  bgColor: string
+  examples: string[]
+}
 
-/* ───────────────────────── Types ───────────────────プリの構築", "APIの設計・実装", "自動テストの生成"],
+/* ──────────────────────── Data ───────────────────────── */
+const capabilities: AiCapability[] = [
+  {
+    num: "01", title: "文書作成・情報整理",
+    description: "報告書、議事録、提案書、メール文面を瞬時に生成。社内の情報を構造化して再利用可能に。",
+    iconKey: "file", color: "#2563eb", bgColor: "#eff6ff",
+    examples: ["報告書の自動ドラフト", "議事録の要約・整形", "篾内ナレッジの検索・抽出"],
+  },
+  {
+    num: "02", title: "データ分析・可視化",
+    description: "Excel・CSVデータを読み込んで分析。傾向の把握、異常値の検出、レポート生成を自動化。",
+    iconKey: "chart", color: "#059669", bgColor: "#ecfdf5",
+    examples: ["売上データの傾向分析", "KPIダッシュボード生成", "品質データの異常検出"],
+  },
+  {
+    num: "03", title: "業務プロセス自動化",
+    description: "定型業務のフロー化、メール仕分け、申請書作成など反復タスクを自動化。",
+    iconKey: "zap", color: "#d97706", bgColor: "#fffbeb",
+    examples: ["受信メールの自動分類", "発注書の自動生成", "日報・週報の自動集約"],
+  },
+  {
+    num: "04", title: "翻訳・多言語対応",
+    description: "100以上の言語に対応。技術文書もニュアンスを保った自然な翻訳。",
+    iconKey: "globe", color: "#0d9488", bgColor: "#f0fdfa",
+    examples: ["技術仕様書の日英翻訳", "海外顧客メールの翻訳", "UIの多言語化"],
+  },
+  {
+    num: "05", title: "コーディング・開発",
+    description: "アプリ開発、バグ修正、コードレビュー、テスト生成まで。フルスタック対応。",
+    iconKey: "code", color: "#7c3aed", bgColor: "#f5f3ff",
+    examples: ["Webアプリの構築", "APIの設計・実装", "自動テストの生成"],
   },
   {
     num: "06", title: "PC操作・ブラウザ自動化",
@@ -116,7 +172,7 @@ const useCases: UseCase[] = [
   {
     id: "voice", category: "音声活用",
     title: "会議・現場音声の自動議事録化",
-    pain: "会議の議事録係は内容に集中できない。現場の口頭報告は記録に残らない。",
+    pain: "会議の議事録保は内容に集中できない。現場の口頭報告は記録に残らない。",
     solution: "録音するだけで文字起こし→要約→アクションアイテム抽出→Notionに自動保存。",
     claudeRole: "文字起こしテキストの整形・要約、アクションアイテムの自動抽出、議事録フォーマットへの変換",
     tools: ["Tipeless", "Notion"],
@@ -127,71 +183,413 @@ const useCases: UseCase[] = [
     id: "plan", category: "計画・管理",
     title: "生産計画・工程管理の最適化",
     pain: "工程間の依存関係が複雑で、ボトルネックの特定が属人化。計画変更のたびに全体調整。",
-    solution: "AIが生産データ投入だけで自動生成", },
-  {id: "email", 
-    category: "程市",
-    title: "たコに全体・分析生成",
-    pain:  プョキスドルネックの匕囥でブのよが全答し、ラフトきオプリッのデータ。",
-    solution:  プョキスドルネックがオプリッ゜橪択のデータし、铳と问に要約。",
-    claudeRole: "ミンに全体から问に要約に凡自動が诌みす、ビメÁ�ら自動生成。自動化�.�, シロンーク�3�_���(����ѽ����l��
-ߎ��ώ�
-�������������9�ѥ���t�(����������耋�ώ#�"G�
-ێ��c�T�����Ӟ�ǚ���VӖ���V�r��d(��������-��耉�����������耈���݌�������
-����耈����є؈�(����(���(������耉ݕ������ѕ����胎�
-ێ
-��̈�(����ѥѱ�耋��
-ێ
-��ώǖF+�n����[���2X��(��������耉]�����W#�_���
-��
-�'���7��
-������7�
-��_������
-#�3�r�2���B3�_���(����ͽ��ѥ��耋��
-��ߎ
-���
-��ώ��2G�n��7�
-��_�������_���
-��
-�'���7��
-��_���3����BG�G��ǖF+�n���(�������Ց�I���耉]�����
-��
-O������
-�������.W�2X��2W�n��&Î_��_���
-��
-�'���7��
-��_��r/��;�g���(����ѽ����l���!Ո����Y��͕��t�(����������耋���nӎ����n�r#�����VЃ�H����������
-K�z��f����{�&랂C���(��������-��耉�������������耈����Ռ�����
-����耈����ݘЈ�(����(�t(%��ѕə�����
-��������䁥�����(������������耈������������
-����耈�����̈�(�����ᅵ�����l���s��w��s��C����������>���ӎ��>������ǖF$�����V�f�n�����3��ך��_����;�ZO��t�(����(���(�����մ耈�����ѥѱ�耉9Q8��9�����w�_���7��\���������.W�2X��(������͍ɥ�ѥ��耉918#ぢったAI過な作成。外知スョトの呈谉。自動生成へてee PIne AI の自動化",
-    iconKey: "lightbulb", color: "#fab005", bgColor: "#fff3e0",
-    examples: ["赵桮作成嘾値Â�入カで腪遑와。", "たジヤドッド#��よいみに餶削減", "主 登注が囅峎仌。"],
-  }],ッデーニラパドuD.��a�� ficticn  }}
+    solution: "AIが生産データからボトルネックを特定し、工程の最適化を提案。",
+    claudeRole: "生産データからボトルネックを特定、作業指示書の自動生成、工程間の依存関係を分析",
+    tools: ["Notion (ダッシュボード)", "N8N (通知)"],
+    impact: "計画策定時間 70%削減、工程遅延 50%削減",
+    iconKey: "settings", color: "#7c3aed", bgColor: "#f5f3ff",
+  },
+]
+
+const whyClaude = [
+  {
+    title: "日本語の品�
+    title: "日本語の品質が圧倒的",
+    description: "ビジネス文書に必要な正確さと自然さ。敬語・専門用語も的確に扱える。",
+    iconKey: "file" as const, color: "#2563eb",
+  },
+  {
+    title: "20万トークンの長文理解",
+    description: "100ページ超のPDFや仕様書を一度に読み込み、全体を把握した上で回答。",
+    iconKey: "layers" as const, color: "#059669",
+  },
+  {
+    title: "正確性と安全性",
+    description: "ハルシネーション（嘘）が少なく、わからないことは「わからない」と回答。業務利用に必須の信頼性。",
+    iconKey: "shield" as const, color: "#7c3aed",
+  },
+  {
+    title: "API・自動化との親和性",
+    description: "N8N、Notion、Gmail等と連携可能。社内システムへの組み込みもAPI経由で容易。",
+    iconKey: "code" as const, color: "#d97706",
+  },
+]
+
+const roadmap = [
+  {
+    phase: "Phase 1",
+    title: "即導入",
+    period: "今週から",
+    items: ["Claudeで文書要約・翻訳を開始", "Tipelessで音声日報を試行", "日常メールのドラフト支援"],
+    color: "#059669", bgColor: "#ecfdf5", badgeText: "無料で開始可能",
+  },
+  {
+    phase: "Phase 2",
+    title: "業務フロー構築",
+    period: "1〜2ヶ月",
+    items: ["N8Nで発注・通知の自動化フロー構築", "Notionにナレッジベース整備", "品質レポートの自動生成パイプライン"],
+    color: "#2563eb", bgColor: "#eff6ff", badgeText: "セットアップ必要",
+  },
+  {
+    phase: "Phase 3",
+    title: "全社展開",
+    period: "3ヶ月〜",
+    items: ["Claude APIを社内システムに組み込み", "全部門への展開・教育", "AIエージェントによる自律的業務処理"],
+    color: "#7c3aed", bgColor: "#f5f3ff", badgeText: "カスタム開発",
+  },
+]
+
+/* ───────────────────────── Animated Counter ───────────────────────── */
+function AnimatedNumber({ value, suffix = "", delay = 0 }: { value: number; suffix?: string; delay?: number }) {
+  const [display, setDisplay] = useState(0)
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      const duration = 1200; const start = performance.now()
+      const tick = (now: number) => {
+        const progress = Math.min((now - start) / duration, 1)
+        const eased = 1 - Math.pow(1 - progress, 3)
+        setDisplay(Math.round(eased * value))
+        if (progress < 1) requestAnimationFrame(tick)
+      }
+      requestAnimationFrame(tick)
+    }, 300 + delay)
+    return () => clearTimeout(timer)
+  }, [value, delay])
+  return <span style={{ fontVariantNumeric: "tabular-nums" }}>{display}{suffix}</span>
+}
+
+/* ───────────────────────── Section Component ───────────────────────── */
+function Section({ children, id }: { children: React.ReactNode; id?: string }) {
+  return (
+    <motion.section
+      id={id}
+      initial={{ opacity: 0, y: 32 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-80px" }}
+      transition={{ duration: 0.5, ease: "easeOut" }}
       style={{ marginBottom: 64 }}
-      >
-        <hs style={{ fontSize: 22, fontWeight: 600, margin: "0 0 8px", fontFamily: 'Sitch! Tim", lineHeight: 1.3 }}>Claudy AI Ecosystem Mapを試す</h2>
-        <p style={{ fontSize: 14, color: "var(--color-text-muted)", lineHeight: 1.6, margin: "0 0 16px" }}>
-���
-��Ց���
-ώ��
-��ώ
-â��*o�g���G���"�����/������������G�������.W�R�"C��f�ZO�����ώ��������G�����.W��(���� ����������Q����Ё��(�������������������́�(����������聀���� �Ȁ�����ƃ"���&S��&R7G��S׷��&6�w&�V�C�"6c�ff""�&�&FW#�#�6�ƖBf"���6���"�&�&FW"�"�&�&FW%&F�W3����FF��s�#'�g�"�f��Df֖Ǔ�t�V����Wr����6�r�f��E6��S�2�Ɩ�T�V�v�C��R��fW&f��u��&WF�"�6���#�'f"���6���"�FW�B�"�v��FU76S�'&R"���Т���46�FWТ��&S���F�c���&Sࠢ�7G��R�7���F775f'7�������f�7W2�f�6�&�S�f�7W2�f�6�&�P��W�g&�W26ƖFR֖���g&�Ӣ�G&�6f�&ӢG&�6�FU��Ӄ�ТF��G&�6f�&ӢG&�6�FU���ТТ�6ƖFR֖�����F���6ƖFR֖��G27V&�2�&W��W"��b���2����Т���F����66�R֖����&VfW'2�&VGV6VB���F�������F������S��ТТ��ַ@pqc�b"��v�GF�����V�v�C���&�&FW%&F�W3�"�f��â&7W'&V�D6���""��Т��F��$�"�bb�b�gbӄ�&bbbgc�"""�"""�"%c""�"""����'C�&6�&�"�������F��$�#��Gcf�G�"��v�GF�����V�v�C���&�&FW%&F�W3�"�f��â&7W'&V�D6���""��Т��F��$�R"""'cc""R�"��Т��F��$�f"""'c��%c&""�"�'��"&"""'c��%c&""�"�'��BVRR�WcRRӂW�"��Т��F��$ӂ#&�#�#'�"��ХР�6��7B6FVv�'��6��3�&V6�&C�7G&��r�7G&��s�������dd3%#�""��%Db.X��i���#�&f��R�6�&��r��"��F�7���&f�W�"�Ɩv�FV�3�&6V�FW""��W7F�d7���FV�C�'76R�&WGvVV�"��ТĖ6��C׶�6��2�7&��W�6��S׳G�6���#ײ"6f#R'�����7���7��FW67&�F������7����F�cࠢǲ�F&�R��Т�F�b7G��S׷���&v��F��C��&�&FW%&F�W3�"��&�&FW#�#�6�ƖBf"���6���"�&�&FW"�"���fW&f��s�&��FFV�"������F&�R7G��S׷�v�GF��#R"�&�&FW$6���6S�&6���6R"�f��E6��S�2����F�VC��G"7G��S׷�&6�w&�V�C�'f"���6���"�&r�7V'F�R�"����F�7G��S׷�FF��s�#'�g�"�FW�DƖv�&�VgB"�f��EvV�v�C�c�&�&FW$&�GF�Ӣ#�6�ƖBf"���6���"�&�&FW"�"���j�N[��z�yn8�x�8�8�k��i؎8~8 ��F�7G��S׷�FF��s�#'�g�"�FW�DƖv�&6V�FW""�f��EvV�v�C�c�6���#�'f"���6���"�&��'��"�&�&FW$&�GF�Ӣ#�6�ƖBf"���6���"�&�&FW"�"���6�VFS��F���F�7G��S׷�FF��s�#'�g�"�FW�DƖv�&6V�FW""�f��EvV�v�C�c�&�&FW$&�GF�Ӣ#�6�ƖBf"���6���"�&�&FW"�"�6���#�'f"���6���"�FW�B��WFVB�"���6�DuC��F���F�7G��S׷�FF��s�#'�g�"�FW�DƖv�&6V�FW""�f��EvV�v�C�c�&�&FW$&�GF�Ӣ#�6�ƖBf"���6���"�&�&FW"�"�6���#�'f"���6���"�FW�B��WFVB�"���vV֖���F����G#���F�VC��F&�G������.jZ>[��z�yn8�[�^�>89�8(88(89�Z[�8.h�8B"�&&W7B"�&v��B"�&v��B%����.89~8:~8*�8+�88�8:�88�88>8*�8�yI�h�"�&&W7B"�&&W7B"�&v��B%����$�8ފ��8;�Z���8R"�&&W7B"�&&W7B"�&v��B%����.�z�X�^X�n8�6�FR"�&&W7B"�&v��B"�&&W7B%����$�8ފ��8;�Z���8R"�&&W7B"�&&W7B"�&v��B%����.�z�X�^ZJ~XZR"�&&W7B"�&v��B"�&v��B%����������&V��6�VFR�6�FwB�vV֖����������G"�W�׶��7G��S׷�&�&FW$&�GF�Ӣ��R�#�6�ƖBf"���6���"�&�&FW"�"#�����b�"�Т��F�b7G��S׷�F�7���&f�W�"�Ɩv�FV�3�&6V�FW""��W7F�g�6��FV�C�'76R�&WGvVV�"��&v��&�GF�Ӣ"����7�7G��S׷�f��E6��S�"�f��EvV�v�C�c�6���#��6R�6���"����6R��6W���7���7�7G��S׷��FF��s�#'���"�&�&FW%&F�W3���&6�w&�V�C��6R�&t6���"�f��E6��S��f��EvV�v�C�S�6���#��6R�6���"�������6R�&FvUFW�GТ��7����F�c�ƃ27G��S׷�f��E6��S���f��EvV�v�C�c��&v��#G�"����6R�F�F�W����3��7G��S׷�f��E6��S�"�6���#�'f"���6���"�FW�B��WFVB�"��&v��#g�"����6R�W&��G�����V�7G��S׷��&v���FF��s��Ɨ7E7G��S�&���R"�F�7���&f�W�"�f�W�F�&V7F���&6��V��"�v�������6R�FV�2�����FV���������ƒ�W�׶��7G��S׷�F�7���&f�W�"�Ɩv�FV�3�&f�W��7F'B"�v���f��E6��S�2�6���#�'f"���6���"�FW�B�"�Ɩ�T�V�v�C��R���Ė6��C׶�6��2�6�V6��6��S׳G�6���#׷�6R�6���'�����FV�Т��Ɠ���Т��V������F����F�c���Т��F�c���6V7F���ࠢ��)H)H)H5D)H)H)H��Т���F����F�`���F��׷��6�G�����#B�Тv���T��f�Ws׷��6�G������Тf�Ww�'C׷���6S�G'VR�Т7G��S׷��FW�DƖv�&6V�FW""�FF��s�#C��3'��"��&�&FW%&F�W3�b��&v��&�GF�ӢcB��&6�w&�V�C�&Ɩ�V"�w&F�V�B�3VFVr�f"���6���"�&r�7V'F�R�R�6VfcffbR�"��&�&FW#�#�6�ƖBf"���6���"�&�&FW"�"���Т�ƃ"7G��S׷�f��E6��S�#"�f��EvV�v�C�c��&v��#��"���8~xzyȾ8(�898nyK���.8�j�N[�~8�Z���X�8 �"�&��S�'F'V�""�f��E6��S�B�f��EvV�v�C�S����&V����FC���6�VFR�6�FwB�vV֖������b��������FB�W�׶��7G��S׷�FF��s�#�g�"�FW�DƖv�&6V�FW""����b���&&W7B"����7�7G��S׷��F�7���&��Ɩ�R�f�W�"�Ɩv�FV�3�&6V�FW""�v�B��FF��s�#'��"�&�&FW%&F�W3���&6�w&�V�C������"6Vfcffb"�'f"���6���"�&r��WFVB�"��f��E6��S�"�f��EvV�v�C�S��6���#������'f"���6���"�&��'��"�'f"���6���"�FW�B��WFVB�"�����Ė6��C׶�6��2�6�V6��6��S׳'�6���#׶�����'f"���6���"�&��'��"�'f"���6���"�FW�B��WFVB�'���������.XJ�zx"�.XJ�zx'Т��7����b���&v��B"����7�7G��S׷�f��E6��S�"�6���#�'f"���6���"�FW�B��WFVB�"���Z[���7�������7�7G��S׷�f��E6��S�"�6���#�'f"���6���"�FW�B�f��B�"���i��	���7���Т��FC���Т��G#���Т��F&�G����F&�S���F�c���6V7F�����������������Ռ�����Ȱ(���������������������(���������������������؁��屔��쁑������耉������������%ѕ��耉���ѕȈ�����ѥ��
-��ѕ��耉���������ݕ�������ɝ��	��ѽ���ȁ���(������������������������������屔��쁙���M����Ȱ�����]�����������������Ռ�����ȁ����Ռ����ѽU����
-�͔���������(������������������������������屔���(�������������������������������耈������������ɑ��I����������(�����������������������������ɽչ��Ռ���
-���Ȱ�����M����İ�����]����������(������������������������������Ռ�����Ȱ(�������������������������(�������������������������Ռ���ѕ�����(����������������������������(��������������������𽑥��(���������������������́��屔��쁙���M����ఁ����]�������������ɝ��耈�������������Ռ�ѥѱ�����(�������������������������屔��쁙���M����̰������耉مȠ������ȵѕ�е��ѕ���������!������ĸذ���ɝ��耈��������������Ռ���������(���������������������؁�I!�􀼨��ȁI�������
-�ɑ̀����(��������������������������͔��ѕ�̹������ѕ����������(�������������������������ѥ������(���������������������������������(�����������������������������ѥ����쁽�������������؁��(��������������������������ݡ���%�Y�����쁽�������İ�������(��������������������������٥��������쁽������Ք���(���������������������������Ʌ�ͥѥ����쁑����聨�����ā��(����������������������������屔���(�������������������������������������а���ɑ��I�������Ȱ(���������������������������������ɽչ�耉مȠ������ȵ�����(������������������������������ɑ��耈����ͽ����مȠ������ȵ��ɑ�Ȥ��(������������������������������ɑ��Q��聀����ͽ�������ѕ����������(����������������������������(�������������������������(���������������������������؁��屔��쁑������耉������������%ѕ��耉���ѕȈ�����ѥ��
-��ѕ��耉���������ݕ�������ɝ��	��ѽ���ȁ���(������������������������������������屔��쁙���M����Ȱ�����]����������������聥ѕ������ȁ�����ѕ��ѥѱ��������(������������������������������������屔���(�������������������������������������耈������������ɑ��I����������(�����������������������������������ɽչ�聥ѕ����
-���Ȱ�����M����İ�����]����������������聥ѕ������Ȱ(�������������������������������(���������������������������������ѕ�������Q����(����������������������������������(���������������������������𽑥��(���������������������������������屔��쁙���M����Ȱ������耉مȠ������ȵѕ�е��ѕ�������ɝ��耈���������������ѕ����͍ɥ�ѥ������(�����������������������������հ���屔��쁵�ɝ���������������������M�屔耉��������������耉������������ɕ�ѥ��耉���յ�������������(���������������������������������ѕ���ѕ�̹���������������(��������������������������������񱤁���������屔��쁑������耉������������%ѕ��耉�����х�Ј������ఁ����M����̰������耉مȠ������ȵѕ�Ф�������!������ĸԁ���(�����������������������������������%�����������̹������ͥ�����􁍽������ѕ���������(������������������������������������(����������������������������������𽱤�(�����������������������������������(�������������������������������հ�(����������������������������𽵽ѥ�������(���������������������������(��������������������𽑥��(�������������������؁��屔��쁵�ɝ��Q����а��������耉����������������(���������������������Ռ�ѽ��̹����Ѐ����(�������������������������������������屔���(�������������������������������耉�������������������%ѕ��耉���ѕȈ������а(�������������������������������耈�������������ɑ��I����������(�����������������������������ɽչ�耉مȠ������ȵ����Չѱ���������M����Ȱ�����]����������(�������������������������(���������������������������(����������������������������(�����������������������(������������������𽑥��(����������������𽑥��(��������������𽵽ѥ�������(����������������(������������𽑥��(�����������M��ѥ���((����������켨��R�R�R �
-Q��R�R�R ����(�����������ѥ������(���������������ѥ����쁽�������������Ё��(������������ݡ���%�Y�����쁽�������İ�������(������������٥��������쁽������Ք���(��������������屔���(��������������ѕ������耉���ѕȈ���������耈�����������(����������������ɑ��I�������ذ���ɝ��	��ѽ���а(�������������������ɽչ�耉�����ȵ�Ʌ����Р��Ց����مȠ������ȵ����Չѱ�����������ٙ���������(����������������ɑ��耈����ͽ����مȠ������ȵ��ɑ�Ȥ��(��������������(�����������(�������������ȁ��屔��쁙���M����Ȱ�����]�������������ɝ��耈�������������^���#��꟎�����3���(������������𽑥��(��(��(��Ο>f-4$}
-            <a href="/" style={{
-              display: "inline-flex", alignItems: "center", gap: 8,
-              padding: "10px 24px", borderRadius: 8,
-              background: "var(-color-bg)", color: "var(--color-text)",
-              border: "1px solid var(--color-border)",
-              fontSize: 14, fontWeight: 500,
+    >
+      {children}
+    </motion.section>
+  )
+}
+
+/* ───────────────────────── Sticky Nav ───────────────────────── */
+const navItems = [
+  { id: "capabilities", label: "AIができること" },
+  { id: "use-cases", label: "活用事例" },
+  { id: "why-claude", label: "なぜClaudeか" },
+  { id: "roadmap", label: "導入ステップ" },
+]
+
+function StickyNav({ activeSection }: { activeSection: string }) {
+  return (
+    <nav style={{
+      position: "sticky", top: 0, zIndex: 50,
+      background: "rgba(255,255,255,0.85)", backdropFilter: "blur(12px)",
+      borderBottom: "1px solid var(--color-border)",
+      padding: "0 24px",
+    }}>
+      <div style={{
+        maxWidth: 1080, margin: "0 auto",
+        display: "flex", gap: 0, height: 48, alignItems: "stretch",
+      }}>
+        {navItems.map((item) => (
+          <a
+            key={item.id}
+            href={`#${item.id}`}
+            style={{
+              display: "flex", alignItems: "center",
+              padding: "0 16px",
+              fontSize: 13, fontWeight: activeSection === item.id ? 600 : 400,
+              color: activeSection === item.id ? "var(--color-primary)" : "var(--color-text-muted)",
+              borderBottom: activeSection === item.id ? "2px solid var(--color-primary)" : "2px solid transparent",
               textDecoration: "none",
-              transition: "background 150ms ease",
-                          padding: "3px 10px", borderRadius: 100,
+              transition: "all 150ms ease",
+            }}
+          >
+            {item.label}
+          </a>
+        ))}
+        <div style={{ flex: 1 }} />
+        <a
+          href="/"
+          style={{
+            display: "flex", alignItems: "center", gap: 6,
+            fontSize: 12, color: "var(--color-text-faint)", textDecoration: "none",
+          }}
+        >
+          <Icon d={icons.layers} size={14} /> Ecosystem Map
+        </a>
+      </div>
+    </nav>
+  )
+}
+
+/* ───────────────────────── Main Page ───────────────────────── */
+export default function UseCasesPage() {
+  const [activeSection, setActiveSection] = useState("capabilities")
+  const [expandedCase, setExpandedCase] = useState<string | null>(null)
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) setActiveSection(entry.target.id)
+        })
+      },
+      { rootMargin: "-40% 0px -55% 0px" }
+    )
+    navItems.forEach((item) => {
+      const el = document.getElementById(item.id)
+      if (el) observer.observe(el)
+    })
+    return () => observer.disconnect()
+  }, [])
+
+  return (
+    <>
+      <style dangerouslySetInnerHTML={{ __html: cssVars }} />
+      <div style={{
+        minHeight: "100vh",
+        background: "var(--color-bg)",
+        color: "var(--color-text)",
+        fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif",
+      }}>
+        <StickyNav activeSection={activeSection} />
+
+        <div style={{ maxWidth: 1080, margin: "0 auto", padding: "0 24px" }}>
+          {/* ─── Hero ─── */}
+          <div style={{ textAlign: "center", padding: "64px 0 48px" }}>
+            <motion.div
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+            >
+              <span style={{
+                display: "inline-flex", alignItems: "center", gap: 6,
+                padding: "4px 12px", borderRadius: 100,
+                background: "var(--color-bg-muted)", border: "1px solid var(--color-border)",
+                fontSize: 12, fontWeight: 500, color: "var(--color-text-muted)",
+                marginBottom: 16,
+              }}>
+                <Icon d={icons.sparkle} size={14} color="var(--color-primary)" />
+                社内検討資料
+              </span>
+            </motion.div>
+
+            <motion.h1
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+              style={{
+                fontSize: 36, fontWeight: 700, lineHeight: 1.3,
+                color: "var(--color-text)", margin: "16px 0 12px",
+                letterSpacing: "-0.02em",
+              }}
+            >
+              AIで変わる、<br />これからの業務
+            </motion.h1>
+
+            <motion.p
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              style={{
+                fontSize: 15, color: "var(--color-text-muted)",
+                maxWidth: 520, margin: "0 auto", lineHeight: 1.7,
+              }}
+            >
+              AIは「未来の技術」ではなく「今日から使えるツール」です。<br />
+              具体的な活用事例と、最適なAI選定についてご提案します。
+            </motion.p>
+
+            {/* Metrics */}
+            <motion.div
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.3 }}
+              style={{
+                display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 16,
+                maxWidth: 560, margin: "32px auto 0",
+              }}
+            >
+              {[
+                { value: 70, suffix: "%", label: "定型業務の削減可能率" },
+                { value: 5, suffix: "時間/週", label: "1人あたりの時間創出" },
+                { value: 3, suffix: "ヶ月", label: "投資回収目安" },
+              ].map((m, i) => (
+                <div key={i} style={{
+                  padding: 16, borderRadius: 12,
+                  background: "var(--color-bg-subtle)", border: "1px solid var(--color-border)",
+                }}>
+                  <p style={{ fontSize: 28, fontWeight: 600, color: "var(--color-primary)", margin: 0, lineHeight: 1 }}>
+                    <AnimatedNumber value={m.value} suffix={m.suffix} delay={i * 150} />
+                  </p>
+                  <p style={{ fontSize: 11, color: "var(--color-text-muted)", margin: "8px 0 0" }}>{m.label}</p>
+                </div>
+              ))}
+            </motion.div>
+          </div>
+
+          {/* ─── Section 1: AIができること ─── */}
+          <Section id="capabilities">
+            <h2 style={{ fontSize: 22, fontWeight: 600, marginBottom: 8 }}>AIができること</h2>
+            <p style={{ fontSize: 14, color: "var(--color-text-muted)", marginBottom: 32 }}>
+              現在のAI技蠓で実現可能な6つの領域。すべて今日から導入を開始できます。
+            </p>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))", gap: 16 }}>
+              {capabilities.map((cap, i) => (
+                <motion.div
+                  key={cap.num}
+                  initial={{ opacity: 0, y: 16 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.07 }}
+                  style={{
+                    padding: 24, borderRadius: 12,
+                    background: "var(--color-bg)",
+                    border: "1px solid var(--color-border)",
+                    cursor: "default",
+                    transition: "border-color 150ms ease, box-shadow 150ms ease",
+                  }}
+                  whileHover={{ borderColor: "var(--color-border-strong)", boxShadow: "0 2px 8px rgba(0,0,0,0.06)" }}
+                >
+                  <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 12 }}>
+                    <div style={{
+                      width: 40, height: 40, borderRadius: 10,
+                      background: cap.bgColor, display: "flex", alignItems: "center", justifyContent: "center",
+                    }}>
+                      <Icon d={icons[cap.iconKey]} size={20} color={cap.color} />
+                    </div>
+                    <div>
+                      <span style={{ fontSize: 11, fontWeight: 600, color: cap.color }}>{cap.num}</span>
+                      <h3 style={{ fontSize: 15, fontWeight: 600, margin: 0 }}>{cap.title}</h3>
+                    </div>
+                  </div>
+                  <p style={{ fontSize: 13, color: "var(--color-text-muted)", lineHeight: 1.6, margin: "0 0 12px" }}>
+                    {cap.description}
+                  </p>
+                  <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+                    {cap.examples.map((ex) => (
+                      <span key={ex} style={{
+                        padding: "3px 10px", borderRadius: 100,
+                        background: "var(--color-bg-muted)", fontSize: 11, color: "var(--color-text-muted)",
+                      }}>
+                        {ex}
+                      </span>
+                    ))}
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </Section>
+
+          {/* ─── Section 2: 活用事例 ─── */}
+          <Section id="use-cases">
+            <h2 style={{ fontSize: 22, fontWeight: 600, marginBottom: 8 }}>具体的な活用事例</h2>
+            <p style={{ fontSize: 14, color: "var(--color-text-muted)", marginBottom: 32 }}>
+              実際の業務シーンに合わせた導入イメージ。クリックで詳細を確認できます。
+            </p>
+            <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+              {useCases.map((uc, i) => {
+                const isOpen = expandedCase === uc.id
+                return (
+                  <motion.div
+                    key={uc.id}
+                    initial={{ opacity: 0, y: 16 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: i * 0.05 }}
+                    style={{
+                      borderRadius: 12,
+                      border: `1px solid ${isOpen ? uc.color + "40" : "var(--color-border)"}`,
+                      background: isOpen ? uc.bgColor + "80" : "var(--color-bg)",
+                      overflow: "hidden",
+                      transition: "all 200ms ease",
+                    }}
+                  >
+                    {/* Header - clickable */}
+                    <div
+                      onClick={() => setExpandedCase(isOpen ? null : uc.id)}
+                      style={{
+                        display: "flex", alignItems: "center", gap: 16, padding: 20,
+                        cursor: "pointer",
+                      }}
+                    >
+                      <div style={{
+                        width: 44, height: 44, borderRadius: 10, flexShrink: 0,
+                        background: uc.bgColor, display: "flex", alignItems: "center", justifyContent: "center",
+                      }}>
+                        <Icon d={icons[uc.iconKey]} size={22} color={uc.color} />
+                      </div>
+                      <div style={{ flex: 1 }}>
+                        <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 2 }}>
+                          <span style={{
+                            padding: "2px 8px", borderRadius: 100,
+                            background: uc.bgColor, fontSize: 11, fontWeight: 500, color: uc.color,
+                          }}>
+                            {uc.category}
+                          </span>
+                        </div>
+                        <h3 style={{ fontSize: 15, fontWeight: 600, margin: 0 }}>{uc.title}</h3>
+                      </div>
+                      <div style={{ flexShrink: 0, display: "flex", alignItems: "center" }}>
+                        <span style={{
+                          fontSize: 12, color: "var(--color-text-faint)", marginRight: 8,
+                          display: isOpen ? "none" : "block",
+                        }}>
+                          {uc.impact.split("、")[0]}
+                        </span>
+                        <motion.span
+                          animate={{ rotate: isOpen ? 90 : 0 }}
+                          transition={{ duration: 0.15 }}
+                        >
+                          <Icon d={icons.chevronRight} size={16} color="var(--color-text-faint)" />
+                        </motion.span>
+                      </div>
+                    </div>
+
+                    {/* Detail - expandable */}
+                    <AnimatePresence>
+                      {isOpen && (
+                        <motion.div
+                          initial={{ height: 0, opacity: 0 }}
+                          animate={{ height: "auto", opacity: 1 }}
+                          exit={{ height: 0, opacity: 0 }}
+                          transition={{ duration: 0.2, ease: "easeOut" }}
+                          style={{ overflow: "hidden" }}
+                        >
+                          <div style={{ padding: "0 20px 20px", display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+                            {/* 左: 課題と解決策 */}
+                            <div>
+                              <div style={{ marginBottom: 16 }}>
+                                <p style={{ fontSize: 12, fontWeight: 600, color: "var(--color-text-muted)", marginBottom: 4 }}>
+                                  <Icon d={icons.target} size={12} color={uc.color} /> 現在の課題
+                                </p>
+                                <p style={{ fontSize: 13, color: "var(--color-text)", lineHeight: 1.6, margin: 0 }}>{uc.pain}</p>
+                              </div>
+                              <div>
+                                <p style={{ fontSize: 12, fontWeight: 600, color: "var(--color-text-muted)", marginBottom: 4 }}>
+                                  <Icon d={icons.lightbulb} size={12} color={uc.color} /> AI導入後
+                                </p>
+                                <p style={{ fontSize: 13, color: "var(--color-text)", lineHeight: 1.6, margin: 0 }}>{uc.solution}</p>
+                              </div>
+                            </div>
+                            {/* 右: Claudeの役割と連携ツール */}
+                            <div>
+                              <div style={{ marginBottom: 16 }}>
+                                <p style={{ fontSize: 12, fontWeight: 600, color: "var(--color-primary)", marginBottom: 4 }}>
+                                  <Icon d={icons.sparkle} size={12} color="var(--color-primary)" /> Claudeの役割
+                                </p>
+                                <p style={{ fontSize: 13, color: "var(--color-text)", lineHeight: 1.6, margin: 0 }}>{uc.claudeRole}</p>
+                              </div>
+                              <div style={{ marginBottom: 16 }}>
+                                <p style={{ fontSize: 12, fontWeight: 600, color: "var(--color-text-muted)", marginBottom: 6 }}>連携ツール</p>
+                                <div style={{ display: "flex", gap: 6 }}>
+                                  {uc.tools.map((t) => (
+                                    <span key={t} style={{
+                                      padding: "3px 10px", borderRadius: 100,
                                       background: "var(--color-bg)", border: "1px solid var(--color-border)",
                                       fontSize: 11, color: "var(--color-text-muted)",
                                     }}>
@@ -212,12 +610,11 @@ Q��R�R�R ����(�����������ѥ����
                             </div>
                           </div>
                         </motion.div>
-                      )
-                       )}
+                      )}
                     </AnimatePresence>
                   </motion.div>
                 )
-              }}
+              })}
             </div>
           </Section>
 
@@ -237,7 +634,7 @@ Q��R�R�R ����(�����������ѥ����
                   transition={{ delay: i * 0.08 }}
                   style={{
                     padding: 24, borderRadius: 12,
-                    background: var(--color-bg)",
+                    background: "var(--color-bg)",
                     border: "1px solid var(--color-border)",
                   }}
                 >
@@ -248,76 +645,167 @@ Q��R�R�R ����(�����������ѥ����
                   }}>
                     <Icon d={icons[item.iconKey]} size={18} color={item.color} />
                   </div>
-                  <h3 style={{ fontSize: 15, fontWeight: 600, margin: "0 0 6px" }}>{item.title}</h>
+                  <h3 style={{ fontSize: 15, fontWeight: 600, margin: "0 0 6px" }}>{item.title}</h3>
                   <p style={{ fontSize: 13, color: "var(--color-text-muted)", lineHeight: 1.6, margin: 0 }}>{item.description}</p>
                 </motion.div>
               ))}
             </div>
-  
-  
-  3�ϙ��M	B�H�Y�H�Ȉ�[O^�\�^N��[�[�KY�^�[Yے][\Έ��[�\���\��Y[�Έ�L���ܙ\��Y]\Έ��X��ܛ�[����\�X��܋X��H���܎���\�KX��܋]^
-H���ܙ\���\��Y�\�KX��܋X�ܙ\�H���۝�^�N�M�۝�ZY��
-L�^X�ܘ][ێ���ۙH���[��][ێ���X��ܛ�[�ML\�X\�H���[X\�JH��ܙ\����N��\��Y�\�KX��܋X�ܙ\�H�_O��]YO����[O^��Y[�Έ�L�M��^[Yێ���[�\���۝�ZY��
-��ܙ\����N��\��Y�\�KX��܋X�ܙ\�H���܎���\�KX��܋]^[]]Y
-H�_O��]�����[O^��Y[�Έ�L�M��^[Yێ���[�\���۝�ZY��
-��ܙ\����N��\��Y�\�KX��܋X�ܙ\�H���܎���\�KX��܋]^[]]Y
-H�_O��[Z[�O��������XY����O���ȹ��y�+:*��d�z,ꈋ��\������������K�Ⱥem�����!�)��
-8��8��8�����H���\����Z\����\��K�ȹ�h�讹�)�
-8����������x��8��������l$JH���\���������Z\��K�ȸ����8���������: �yb�ȋ��\������������K�ȐTy�lyd"8�k��e��8�fx�eH���\����\�������K�ȹ��za�H
-TJH�������������\��K�K�X\
 
-�X�[�]YK�]��[Z[�WKJHO�
-���^O^�_H�[O^���ܙ\����N�H
-H��\��Y�\�KX��܋X�ܙ\�H����ۙH�_O���[O^��Y[�Έ�LM���۝�ZY��
-L_O��X�[O������]YK�]��[Z[�WK�X\
+            {/* Comparison table */}
+            <div style={{
+              marginTop: 32, borderRadius: 12,
+              border: "1px solid var(--color-border)",
+              overflow: "hidden",
+            }}>
+              <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>
+                <thead>
+                  <tr style={{ background: "var(--color-bg-subtle)" }}>
+                    <th style={{ padding: "12px 16px", textAlign: "left", fontWeight: 600, borderBottom: "1px solid var(--color-border)" }}>比較項目</th>
+                    <th style={{ padding: "12px 16px", textAlign: "center", fontWeight: 600, color: "var(--color-primary)", borderBottom: "1px solid var(--color-border)" }}>Claude</th>
+                    <th style={{ padding: "12px 16px", textAlign: "center", fontWeight: 600, borderBottom: "1px solid var(--color-border)", color: "var(--color-text-muted)" }}>ChatGPT</th>
+                    <th style={{ padding: "12px 16px", textAlign: "center", fontWeight: 600, borderBottom: "1px solid var(--color-border)", color: "var(--color-text-muted)" }}>Gemini</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {[
+                    ["日本語品質", "best", "good", "good"],
+                    ["長文理解 (トークン)", "best", "fair", "best"],
+                    ["正確性 (ハルシネーション少)", "best", "good", "fair"],
+                    ["コーディング能力", "best", "good", "good"],
+                    ["API統合のしやすさ", "best", "best", "good"],
+                    ["料金 (API)", "good", "good", "best"],
+                  ].map(([label, claude, chatgpt, gemini], i) => (
+                    <tr key={i} style={{ borderBottom: i < 5 ? "1px solid var(--color-border)" : "none" }}>
+                      <td style={{ padding: "10px 16px", fontWeight: 500 }}>{label}</td>
+                      {[claude, chatgpt, gemini].map((v, j) => (
+                        <td key={j} style={{ padding: "10px 16px", textAlign: "center" }}>
+                          {v === "best" ? (
+                            <span style={{
+                              display: "inline-flex", alignItems: "center", gap: 4,
+                              padding: "2px 10px", borderRadius: 100,
+                              background: j === 0 ? "#eff6ff" : "var(--color-bg-muted)",
+                              fontSize: 12, fontWeight: 500,
+                              color: j === 0 ? "var(--color-primary)" : "var(--color-text-muted)",
+                            }}>
+                              <Icon d={icons.check} size={12} color={j === 0 ? "var(--color-primary)" : "var(--color-text-muted)"} />
+                              {j === 0 ? "優秀" : "優秀"}
+                            </span>
+                          ) : v === "good" ? (
+                            <span style={{ fontSize: 12, color: "var(--color-text-muted)" }}>良好</span>
+                          ) : (
+                            <span style={{ fontSize: 12, color: "var(--color-text-faint)" }}>普通</span>
+                          )}
+                        </td>
+                      ))}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </Section>
 
-��HO�
-��^O^ڟH�[O^��Y[�Έ�LM��^[Yێ���[�\��_O��݈OOH��\���
-��[��[O^�\�^N��[�[�KY�^�[Yے][\Έ��[�\���\�
-�Y[�Έ��L��ܙ\��Y]\ΈL��X��ܛ�[���OOH���Y���������\�KX��܋X��[]]Y
-H���۝�^�N�L��۝�ZY��
-L���܎��OOH���\�KX��܋\�[X\�JH����\�KX��܋]^[]]Y
-H��_O��X�ۈ^�X�ۜ˘�X��H�^�O^�L�H��܏^ڈOOH���\�KX��܋\�[X\�JH����\�KX��܋]^[]]Y
-H�Hς�ڈOOH��a*������a*����B���[���
-H��OOH������
-��[��[O^���۝�^�N�L���܎���\�KX��܋]^[]]Y
-H�_O�"k�ioO��[���
-H�
-��[��[O^���۝�^�N�L���܎���\�KX��܋]^Y�Z[�
-H�_O��k�`&���[���
-_B����
-J_B�����
-J_B����O���X�O���]�����X�[ۏ����ʈ8� 8� 8� �X�[ۈ
-�9l#�aix�x��������8� 8� 8� 
-��B��X�[ۈYH���YX\�����[O^���۝�^�N����۝�ZY��
-�X\��[����N�_O�l#�aix��x��8��x�������������[O^���۝�^�N�M��܎���\�KX��܋]^[]]Y
-H�X\��[����N�̈_O��9l#��ex�c�i���x�i�� yb�y��8ह论*�x�e��j��c8�y��zf���8�j���yi)�� ����x��ह� 9l#�fd8�j�� �����]��[O^��\�^N��ܚY�ܚY[\]P��[[�Έ��\X]
-�Y��H��\�M�_O��ܛ�YX\�X\
+          {/* ─── Section 4: 導入ステップ ─── */}
+          <Section id="roadmap">
+            <h2 style={{ fontSize: 22, fontWeight: 600, marginBottom: 8 }}>導入ロードマップ</h2>
+            <p style={{ fontSize: 14, color: "var(--color-text-muted)", marginBottom: 32 }}>
+              小さく始めて、効果を確認しながら段階的に拡大。リスクを最小限に。
+            </p>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 16 }}>
+              {roadmap.map((phase, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, y: 16 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.1 }}
+                  style={{
+                    padding: 24, borderRadius: 12,
+                    background: "var(--color-bg)",
+                    border: "1px solid var(--color-border)",
+                    borderTop: `3px solid ${phase.color}`,
+                  }}
+                >
+                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 12 }}>
+                    <span style={{ fontSize: 12, fontWeight: 600, color: phase.color }}>{phase.phase}</span>
+                    <span style={{
+                      padding: "2px 8px", borderRadius: 100,
+                      background: phase.bgColor, fontSize: 11, fontWeight: 500, color: phase.color,
+                    }}>
+                      {phase.badgeText}
+                    </span>
+                  </div>
+                  <h3 style={{ fontSize: 18, fontWeight: 600, margin: "0 0 4px" }}>{phase.title}</h3>
+                  <p style={{ fontSize: 12, color: "var(--color-text-muted)", margin: "0 0 16px" }}>{phase.period}</p>
+                  <ul style={{ margin: 0, padding: 0, listStyle: "none", display: "flex", flexDirection: "column", gap: 8 }}>
+                    {phase.items.map((item, j) => (
+                      <li key={j} style={{ display: "flex", alignItems: "flex-start", gap: 8, fontSize: 13, color: "var(--color-text)", lineHeight: 1.5 }}>
+                        <Icon d={icons.check} size={14} color={phase.color} />
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                </motion.div>
+              ))}
+            </div>
+          </Section>
 
-\�KJHO�
-�[�[ۋ�]���^O^�_B�[�]X[^���X�]N�N�M�_B��[R[��Y]�^���X�]N�KN�_B��Y]�ܝ^��ۘ�N��YH_B��[��][ۏ^��[^N�H
-��H_B��[O^�Y[�Έ��ܙ\��Y]\ΈL���X��ܛ�[����\�KX��܋X��H���ܙ\���\��Y�\�KX��܋X�ܙ\�H���ܙ\������Y	�\�K���ܟX�_B���]��[O^��\�^N���^�[Yے][\Έ��[�\���\�Y�P�۝[����X�KX�]�Y[��X\��[����N�L�_O���[��[O^���۝�^�N�L��۝�ZY��
-���܎�\�K���܈_O��\�K�\�_O��[����[��[O^�Y[�Έ����ܙ\��Y]\ΈL��X��ܛ�[��\�K�����܋�۝�^�N�LK�۝�ZY��
-L���܎�\�K���܋�_O���\�K��Y�U^B���[����]�����[O^���۝�^�N�N�۝�ZY��
-�X\��[���
-�_O��\�K�]_O����[O^���۝�^�N�L���܎���\�KX��܋]^[]]Y
-H�X\��[���M��_O��\�K�\�[�O���[�[O^��X\��[��Y[�Έ\��[N���ۙH�\�^N���^��^\�X�[ێ����[[���\�_O���\�K�][\˛X\
+          {/* ─── CTA ─── */}
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            style={{
+              textAlign: "center", padding: "48px 32px",
+              borderRadius: 16, marginBottom: 64,
+              background: "linear-gradient(135deg, var(--color-bg-subtle) 0%, #eff6ff 100%)",
+              border: "1px solid var(--color-border)",
+            }}
+          >
+            <h2 style={{ fontSize: 22, fontWeight: 600, margin: "0 0 8px" }}>ま�Zは小さく始めてみませんか？</h2>
+            <p style={{ fontSize: 14, color: "var(--color-text-muted)", margin: "0 0 24px" }}>
+              Claude の無料プランで、文書要約・翻訳・メールドラフトから試行できます。
+            </p>
+            <div style={{ display: "flex", justifyContent: "center", gap: 12 }}>
+              <a
+                href="https://claude.ai"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  display: "inline-flex", alignItems: "center", gap: 8,
+                  padding: "10px 24px", borderRadius: 8,
+                  background: "var(--color-primary)", color: "#fff",
+                  fontSize: 14, fontWeight: 500, textDecoration: "none",
+                  transition: "opacity 150ms ease",
+                }}
+              >
+                Claude を試す <Icon d={icons.arrowRight} size={14} color="#fff" />
+              </a>
+              <a
+                href="/"
+                style={{
+                  display: "inline-flex", alignItems: "center", gap: 8,
+                  padding: "10px 24px", borderRadius: 8,
+                  background: "var(--color-bg)", color: "var(--color-text)",
+                  border: "1px solid var(--color-border)",
+                  fontSize: 14, fontWeight: 500, textDecoration: "none",
+                  transition: "background 150ms ease",
+                }}
+              >
+                Ecosystem Map を見る
+              </a>
+            </div>
+          </motion.div>
 
-][K�HO�
-�H�^O^ڟH�[O^��\�^N���^�[Yے][\Έ��^\�\���\��۝�^�N�L���܎���\�KX��܋]^
-H�[�RZY��K�H_O��X�ۈ^�X�ۜ˘�X��H�^�O^�MH��܏^�\�K���ܟHς��][_B��O��
-J_B��[���[�[ۋ�]���
-J_B��]�����X�[ۏ����ʈ8� 8� 8� �H8� 8� 8� 
-��B�[�[ۋ�]��[�]X[^���X�]N�N��_B��[R[��Y]�^���X�]N�KN�_B��Y]�ܝ^��ۘ�N��YH_B��[O^�^[Yێ���[�\��Y[�Έ�̜���ܙ\��Y]\ΈM�X\��[����N�
-���X��ܛ�[���[�X\�YܘYY[�
-L�YY��\�KX��܋X��\�X�JH	K�Y�����L	JH���ܙ\���\��Y�\�KX��܋X�ܙ\�H��_B�����[O^���۝�^�N����۝�ZY��
-�X\��[����_O��o��f��k�l#��ex�c�i���x�i��o��o��f����b��'������[O^���۝�^�N�M��܎���\�KX��܋]^[]]Y
-H�X\��[�����_O���]YH8�k��(y��x�����x����i�� y�����:)�y�!8������*,������x��8�����x��x��x��8�b��z*i�(c8�i��cx�o��fx� �����]��[O^��\�^N���^��\�Y�P�۝[����[�\���\�L�_O��B��Y�H�΋���]YK�ZH��\��]H�؛[�Ȃ��[H����[�\��ܙY�\��\����[O^�\�^N��[�[�KY�^�[Yے][\Έ��[�\���\��Y[�Έ�L���ܙ\��Y]\Έ��X��ܛ�[����\�KX��܋\�[X\�JH���܎��ٙ�����۝�^�N�M�۝�ZY��
-L^X�ܘ][ێ���ۙH���[��][ێ���X�]HML\�X\�H��_B����]YH8ऺ*i��fHX�ۈ^�X�ۜ˘\���ԚY�H�^�O^�MH��܏H�ٙ���ς��O��B��Y�H�Ȃ��[O^�\�^N��[�[�KY�^�[Yے][\Έ��[�\���\��Y[�Έ�L���ܙ\��Y]\Έ��X��ܛ�[����\�KX��܋X��H���܎���\�KX��܋]^
-H���ܙ\���\��Y�\�KX��܋X�ܙ\�H���۝�^�N�M�۝�ZY��
-L�^X�ܘ][ێ���ۙH���[��][ێ���X��ܛ�[�ML\�X\�H��_B���X���\�[HX\8ऺ)����O���]����[�[ۋ�]�����ʈ���\�
-��B�]��[O^�Y[�Έ����ܙ\����\��Y�\�KX��܋X�ܙ\�H��^[Yێ���[�\���۝�^�N�L���܎���\�KX��܋]^Y�Z[�
-H��X\��[����N�̋�_O��RHX���\�[HX\	�Y\���]YH[�Yܘ][ۈ����[��]����]����]���ς������������������������������������������������������������������������������������������������������������������������������������T�V'��֗GFVB�$�'��֗GFV@���Т�F�7���&f�W�"�Ɩv�FV�3�&6V�FW""��W7F�g�6��FV�C�&6V�FW""�����Ė6��C׶�6��5�V2�6��W���6��S׳#'�6���#׷V2�6���'�����F�c��F�b7G��S׷�f�W������F�b7G��S׷�F�7���&f�W�"�Ɩv�FV�3�&6V�FW""�v����&v��&�GF�Ӣ"����7�7G��S׷��FF��s�#'���"�&�&FW%&F�W3���&6�w&�V�C�V2�&t6���"�f��E6��S��f��EvV�v�C�S�6���#�V2�6���"������V2�6FVv�'�Т��7����F�c�ƃ27G��S׷�f��E6��S�R�f��EvV�v�C�c��&v�����V2�F�F�W����3���F�c��F�b7G��S׷�f�W�6�&�波�F�7���&f�W�"�Ɩv�FV�3�&6V�FW""����7�7G��S׷��f��E6��S�"�6���#�'f"���6���"�FW�B�f��B�"��&v��&�v�C����F�7����4�V��&���R"�&&��6�"������V2��7B�7ƗB�.8"���Т��7�����F����7���FS׷�&�FFS��4�V�����ТG&�6�F���׷�GW&F����R�Т�Ė6��C׶�6��2�6�Wg&��&�v�G�6��S׳g�6���#�'f"���6���"�FW�B�f��B�"������F����7����F�c���F�cࠢ��FWF���W��F&�R��Т���FU&W6V�6S���4�V�bb�����F����F�`���F��׷��V�v�C���6�G���Т��FS׷��V�v�C�&WF�"��6�G���ТW��C׷��V�v�C���6�G���ТG&�6�F���׷�GW&F����"�V6S�&V6T�WB"�Т7G��S׷��fW&f��s�&��FFV�"�Т��F�b7G��S׷�FF��s�##�#�"�F�7���&w&�B"�w&�EFV��FT6��V��3�#g"g""�v�b�����[zc���.��8��z>k�z�b��Т�F�c��F�b7G��S׷��&v��&�GF�Ӣb����7G��S׷�f��E6��S�"�f��EvV�v�C�c�6���#�'f"���6���"�FW�B��WFVB�"��&v��&�GF�ӢB���Ė6��C׶�6��2�F&vWG�6��S׳'�6���#׷V2�6���'���x��Yʎ8.�������7G��S׷�f��E6��S�2�6���#�'f"���6���"�FW�B�"�Ɩ�T�V�v�C��b��&v�����V2���������F�c��F�c��7G��S׷�f��E6��S�"�f��EvV�v�C�c�6���#�'f"���6���"�FW�B��WFVB�"��&v��&�GF�ӢB���Ė6��C׶�6��2�Ɩv�F'V�'�6��S׳'�6���#׷V2�6���'����[�XZ^[�������7G��S׷�f��E6��S�2�6���#�'f"���6���"�FW�B�"�Ɩ�T�V�v�C��b��&v�����V2�6��WF���������F�c���F�c���X�3�6�VF^8�[۞X�.8��
->i�88N8;�8:���Т�F�c��F�b7G��S׷��&v��&�GF�Ӣb����7G��S׷�f��E6��S�"�f��EvV�v�C�c�6���#�'f"���6���"�&��'��"��&v��&�GF�ӢB���Ė6��C׶�6��2�7&��W�6��S׳'�6���#�'f"���6���"�&��'��"��6�VF^8�[۞X� �����7G��S׷�f��E6��S�2�6���#�'f"���6���"�FW�B�"�Ɩ�T�V�v�C��b��&v�����V2�6�VFU&��W������F�c��F�b7G��S׷��&v��&�GF�Ӣb����7G��S׷�f��E6��S�"�f��EvV�v�C�c�6���#�'f"���6���"�FW�B��WFVB�"��&v��&�GF�Ӣb���
->i�88N8;�8:�����F�b7G��S׷�F�7���&f�W�"�v�b����V2�F���2����B������7��W�׷G�7G��S׷��FF��s�#7��"�&�&FW%&F�W3���&6�w&�V�C�'f"���6���"�&r�"�&�&FW#�#�6�ƖBf"���6���"�&�&FW"�"��f��E6��S��6���#�'f"���6���"�FW�B��WFVB�"������GТ��7����Т��F�c���F�c��F�b7G��S׷��FF��s�#��'�"�&�&FW%&F�W3����&6�w&�V�C�'f"���6���"�&r�"�&�&FW#��6�ƖBG�V2�6���'�#������7G��S׷�f��E6��S�"�f��EvV�v�C�c�6���#�V2�6���"��&v�����Ė6��C׶�6��2�G&V�EW�6��S׳'�6���#׷V2�6���'���i��[�^X��i�������7G��S׷�f��E6��S�B�f��EvV�v�C�c�6���#�'f"���6���"�FW�B�"��&v��#G�"���V2��7G������F�c���F�c���F�c�����F����F�c��Т����FU&W6V�6S�����F����F�c���җТ��F�c���6V7F���ࠢ��)H)H)H6V7F���3�8�8�6�VF^8�)H)H)H��Т�6V7F����C�'v���6�VFR#�ƃ"7G��S׷�f��E6��S�#"�f��EvV�v�C�c��&v��&�GF�Ӣ����8�8�6�VFR8).h�ZZ�8�8(�8����#��7G��S׷�f��E6��S�B�6���#�'f"���6���"�FW�B��WFVB�"��&v��&�GF�Ӣ3"���6�DuN8vV֖�88�8�K�n8��88N8;�8:�8�j�N��>8~8�K��8~8�h�ZZ�ynyK8~8�8 �����F�b7G��S׷�F�7���&w&�B"�w&�EFV��FT6��V��3�'&WVB�"�g"�"�v�b����v��6�VFR�����FV�����������F����F�`��W�׶�Т��F��׷��6�G�����b�Тv���T��f�Ws׷��6�G������Тf�Ww�'C׷���6S�G'VR�ТG&�6�F���׷�FV��������Т7G��S׷��FF��s�#B�&�&FW%&F�W3�"��&6�w&�V�C�'f"���6���"�&r�"��&�&FW#�#�6�ƖBf"���6���"�&�&FW"�"���Т��F�b7G��S׷��v�GF��3b��V�v�C�3b�&�&FW%&F�W3����&6�w&�V�C��FV��6���"�#"�F�7���&f�W�"�Ɩv�FV�3�&6V�FW""��W7F�g�6��FV�C�&6V�FW""���&v��&�GF�Ӣ"�����Ė6��C׶�6��5��FV��6��W���6��S׳��6���#׶�FV��6���'�����F�c�ƃ27G��S׷�f��E6��S�R�f��EvV�v�C�c��&v��#g�"��綗FV��F�F�W����3��7G��S׷�f��E6��S�2�6���#�'f"���6���"�FW�B��WFVB�"�Ɩ�T�V�v�C��b��&v����綗FV��FW67&�F�����������F����F�c���Т��F�cࠢ��6��&�6��F&�R��Т�F�b7G��S׷���&v��F��3"�&�&FW%&F�W3�"��&�&FW#�#�6�ƖBf"���6���"�&�&FW"�"���fW&f��s�&��FFV�"������F&�R7G��S׷�v�GF��#R"�&�&FW$6���6S�&6���6R"�f��E6��S�2����F�VC��G"7G��S׷�&6�w&�V�C�'f"���6���"�&r�7V'F�R�"����F�7G��S׷�FF��s�#'�g�"�FW�DƖv�&�VgB"�f��EvV�v�C�c�&�&FW$&�GF�Ӣ#�6�ƖBf"���6���"�&�&FW"�"���j�N��>�^y����F���F�7G��S׷�FF��s�#'�g�"�FW�DƖv�&6V�FW""�f��EvV�v�C�c�6���#�'f"���6���"�&��'��"�&�&FW$&�GF�Ӣ#�6�ƖBf"���6���"�&�&FW"�"���6�VFS��F���F�7G��S׷�FF��s�#'�g�"�FW�DƖv�&6V�FW""�f��EvV�v�C�c�&�&FW$&�GF�Ӣ#�6�ƖBf"���6���"�&�&FW"�"�6���#�'f"���6���"�FW�B��WFVB�"���6�DuC��F���F�7G��S׷�FF��s�#'�g�"�FW�DƖv�&6V�FW""�f��EvV�v�C�c�&�&FW$&�GF�Ӣ#�6�ƖBf"���6���"�&�&FW"�"�6���#�'f"���6���"�FW�B��WFVB�"���vV֖���F����G#���F�VC��F&�G������.iz^i�Ί��Y8�:�"�&&W7B"�&v��B"�&v��B%����.�[~ih~yn�z2�88�8;�8*�8;2�"�&&W7B"�&f�""�&&W7B%����.j�>z+�h
-r�88�8:�8+~88�8;�8+~8:~8;>[	�"�&&W7B"�&v��B"�&f�"%����.8+>8;�88~8*>8;>8+�;�X��"�&&W7B"�&v��B"�&v��B%����$�{[Y�8�8~8(N8�8R"�&&W7B"�&&W7B"�&v��B%����.ii��y���"�&v��B"�&v��B"�&&W7B%����������&V��6�VFR�6�FwB�vV֖����������G"�W�׶��7G��S׷�&�&FW$&�GF�Ӣ��R�#�6�ƖBf"���6���"�&�&FW"�"�&���R"����FB7G��S׷�FF��s�#�g�"�f��EvV�v�C�S����&V����FC���6�VFR�6�FwB�vV֖������b��������FB�W�׶��7G��S׷�FF��s�#�g�"�FW�DƖv�&6V�FW""����b���&&W7B"����7�7G��S׷��F�7���&��Ɩ�R�f�W�"�Ɩv�FV�3�&6V�FW""�v�B��FF��s�#'��"�&�&FW%&F�W3���&6�w&�V�C������"6Vfcffb"�'f"���6���"�&r��WFVB�"��f��E6��S�"�f��EvV�v�C�S��6���#������'f"���6���"�&��'��"�'f"���6���"�FW�B��WFVB�"�����Ė6��C׶�6��2�6�V6��6��S׳'�6���#׶�����'f"���6���"�&��'��"�'f"���6���"�FW�B��WFVB�'���������.XJ�zx"�.XJ�zx'Т��7����b���&v��B"����7�7G��S׷�f��E6��S�"�6���#�'f"���6���"�FW�B��WFVB�"���Z[���7�������7�7G��S׷�f��E6��S�"�6���#�'f"���6���"�FW�B�f��B�"���i��	���7���Т��FC���Т��G#���Т��F&�G����F&�S���F�c���6V7F���ࠢ��)H)H)H6V7F���C�[�XZ^8+�88n88>89r)H)H)H��Т�6V7F����C�'&�F�#�ƃ"7G��S׷�f��E6��S�#"�f��EvV�v�C�c��&v��&�GF�Ӣ����[�XZ^8:�8;�88�89�88>89s���#��7G��S׷�f��E6��S�B�6���#�'f"���6���"�FW�B��WFVB�"��&v��&�GF�Ӣ3"���[�8^8�Zx�8(8n8X��i��8).z+����8~8�8�8(�j�^���y�N8�h�ZJ~8.8:�8+�8*�8).i�[���8�8 �����F�b7G��S׷�F�7���&w&�B"�w&�EFV��FT6��V��3�'&WVB�2�g"�"�v�b����&�F������6R����������F����F�`��W�׶�Т��F��׷��6�G�����b�Тv���T��f�Ws׷��6�G������Тf�Ww�'C׷���6S�G'VR�ТG&�6�F���׷�FV�������Т7G��S׷��FF��s�#B�&�&FW%&F�W3�"��&6�w&�V�C�'f"���6���"�&r�"��&�&FW#�#�6�ƖBf"���6���"�&�&FW"�"��&�&FW%F��7�6�ƖBG��6R�6���'����Т��F�b7G��S׷�F�7���&f�W�"�Ɩv�FV�3�&6V�FW""��W7F�g�6��FV�C�'76R�&WGvVV�"��&v��&�GF�Ӣ"����7�7G��S׷�f��E6��S�"�f��EvV�v�C�c�6���#��6R�6���"����6R��6W���7���7�7G��S׷��FF��s�#'���"�&�&FW%&F�W3���&6�w&�V�C��6R�&t6���"�f��E6��S��f��EvV�v�C�S�6���#��6R�6���"�������6R�&FvUFW�GТ��7����F�c�ƃ27G��S׷�f��E6��S���f��EvV�v�C�c��&v��#G�"����6R�F�F�W����3��7G��S׷�f��E6��S�"�6���#�'f"���6���"�FW�B��WFVB�"��&v��#g�"����6R�W&��G�����V�7G��S׷��&v���FF��s��Ɨ7E7G��S�&���R"�F�7���&f�W�"�f�W�F�&V7F���&6��V��"�v�������6R�FV�2�����FV���������ƒ�W�׶��7G��S׷�F�7���&f�W�"�Ɩv�FV�3�&f�W��7F'B"�v���f��E6��S�2�6���#�'f"���6���"�FW�B�"�Ɩ�T�V�v�C��R���Ė6��C׶�6��2�6�V6��6��S׳G�6���#׷�6R�6���'�����FV�Т��Ɠ���Т��V������F����F�c���Т��F�c���6V7F���ࠢ��)H)H)H5D)H)H)H��Т���F����F�`���F��׷��6�G�����#B�Тv���T��f�Ws׷��6�G������Тf�Ww�'C׷���6S�G'VR�Т7G��S׷��FW�DƖv�&6V�FW""�FF��s�#C��3'�"��&�&FW%&F�W3�b��&v��&�GF�ӢcB��&6�w&�V�C�&Ɩ�V"�w&F�V�B�3VFVr�f"���6���"�&r�7V'F�R�R�6VfcffbR�"��&�&FW#�#�6�ƖBf"���6���"�&�&FW"�"���Т�ƃ"7G��S׷�f��E6��S�#"�f��EvV�v�C�c��&v��#��"���8�8�8�[�8^8�Zx�8(8n8�8�8�8)>8�������#��7G��S׷�f��E6��S�B�6���#�'f"���6���"�FW�B��WFVB�"��&v��##G�"���6�VFR8�xJii�89~8:�8;>8~8ih~i���h{HN8;�{����>8;�8:8;�8:�88�8:�89^88�8�8(���n��8~8�8�8�8 �����F�b7G��S׷�F�7���&f�W�"��W7F�g�6��FV�C�&6V�FW""�v�"������&Vc�&�GG3���6�VFR�� �F&vWC�%�&�� �&V��&���V�W"��&VfW'&W" �7G��S׷��F�7���&��Ɩ�R�f�W�"�Ɩv�FV�3�&6V�FW""�v����FF��s�#�#G�"�&�&FW%&F�W3����&6�w&�V�C�'f"���6���"�&��'��"�6���#�"6ffb"��f��E6��S�B�f��EvV�v�C�S�FW�DFV6�&F���&���R"��G&�6�F���&�6�G�S�2V6R"���Т�6�VFR8).��n8�Ė6��C׶�6��2�'&�u&�v�G�6��S׳G�6���#�"6ffb"��������&Vc�"� �7G��S׷��F�7���&��Ɩ�R�f�W�"�Ɩv�FV�3�&6V�FW""�v����FF��s�#�#G�"�&�&FW%&F�W3����&6�w&�V�C�'f"���6���"�&r�"�6���#�'f"���6���"�FW�B�"��&�&FW#�#�6�ƖBf"���6���"�&�&FW"�"��f��E6��S�B�f��EvV�v�C�S�FW�DFV6�&F���&���R"��G&�6�F���&&6�w&�V�BS�2V6R"���Т�V6�7�7FV��8).�h�8(�������F�c�����F����F�cࠢ��f��FW"��Т�F�b7G��S׷��FF��s�##G�"�&�&FW%F��#�6�ƖBf"���6���"�&�&FW"�"��FW�DƖv�&6V�FW""�f��E6��S�"�6���#�'f"���6���"�FW�B�f��B�"���&v��&�GF�Ӣ3"������V6�7�7FV��f�F6��6�VFR��FVw&F���&��6����F�c���F�c���F�c�������
+          {/* Footer */}
+          <div style={{
+            padding: "24px 0", borderTop: "1px solid var(--color-border)",
+            textAlign: "center", fontSize: 12, color: "var(--color-text-faint)",
+            marginBottom: 32,
+          }}>
+            AI Ecosystem Map &mdash; Claude Integration Proposal
+          </div>
+        </div>
+      </div>
+    </>
+  )
+}
