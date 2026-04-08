@@ -369,7 +369,7 @@ export function EcosystemVisualization() {
               </div>
               <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
                 <div style={{ width: 8, height: 8, borderRadius: "50%", background: "#e11d48" }} />
-                <span style={{ fontSize: 11, color: "#475569", fontWeight: 500 }}>苦手を補e��</span>
+                <span style={{ fontSize: 11, color: "#475569", fontWeight: 500 }}>苦手を補完</span>
               </div>
             </div>
           </div>
@@ -386,7 +386,7 @@ export function EcosystemVisualization() {
             >
               <div style={{ width: 10, height: 10, borderRadius: "50%", background: "#e11d48" }} />
               <span style={{ fontSize: 13, fontWeight: 700, color: "#e11d48", letterSpacing: 1, textTransform: "uppercase" }}>
-                苦手を補e��
+                苦手を補完
               </span>
               <span style={{ fontSize: 11, color: "#94a3b8", marginLeft: 4 }}>
                 {complementServices.length} 分野
