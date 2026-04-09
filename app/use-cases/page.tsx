@@ -43,6 +43,12 @@ const icons = {
   bookOpen: "M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2zM22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z",
   messageCircle: "M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z",
   smartphone: "M6 2h12a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2zM12 18h.01",
+  repeat: "M17 1l4 4-4 4M3 11V9a4 4 0 0 1 4-4h14M7 23l-4-4 4-4M21 13v2a4 4 0 0 1-4 4H3",
+  cpu: "M6 2h12a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2zM9 2v20M15 2v20M2 9h20M2 15h20",
+  video: "M23 7l-7 5 7 5V7zM14 5H3a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2z",
+  users: "M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2M9 7a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75",
+  workflow: "M3 3h6v6H3zM15 3h6v6h-6zM9 15h6v6H9zM6 9v3a3 3 0 0 0 3 3h0M18 9v3a3 3 0 0 1-3 3h0",
+  refresh: "M1 4v6h6M23 20v-6h-6M20.49 9A9 9 0 0 0 5.64 5.64L1 10M23 14l-4.64 4.36A9 9 0 0 1 3.51 15",
 }
 
 /* ───────────────────────── CSS Variables ───────────────────────── */
@@ -88,108 +94,140 @@ interface AiCapability {
   tag?: string
 }
 
-/* ───────────────────────── Data ───────────────────────── */
+/* ───────────────────────── Data: 21 AI Capabilities ───────────────────────── */
 const capabilities: AiCapability[] = [
-  /* ── AIが得意な10分野 ── */
+  /* ── AI得意分野（テキスト・分析・生成が中心）── */
   {
-    num: "01", title: "文書作成・要約",
+    num: "01", title: "文章作成・要約・レポート",
     description: "報告書、議事録、提案書、メール文面を瞬時に生成。長文PDFの要約や社内ナレッジの構造化も。",
     iconKey: "file", color: "#2563eb", bgColor: "#eff6ff",
-    examples: ["報告書の自動ドラフト", "議事録の要約", "社内文書の整理"],
+    examples: ["報告書ドラフト", "議事録の要約", "レポート自動生成"],
   },
   {
-    num: "02", title: "翻訳・多言語対応",
-    description: "100以上の言語に対応。技術文書もニュアンスを保った自然な翻訳。敬語・専門用語も的確に処理。",
-    iconKey: "globe", color: "#0d9488", bgColor: "#f0fdfa",
-    examples: ["技術仕様書の日英翻訳", "海外メール翻訳", "UIの多言語化"],
-  },
-  {
-    num: "03", title: "コーディング・開発支援",
+    num: "02", title: "コーディング・開発支援",
     description: "コード生成、バグ修正、コードレビュー、テスト自動生成。フルスタック対応で開発速度を飛躍的に向上。",
     iconKey: "code", color: "#7c3aed", bgColor: "#f5f3ff",
-    examples: ["Webアプリ構築", "API設計・実装", "自動テスト生成"],
+    examples: ["Webアプリ構築", "API実装", "自動テスト生成"],
   },
   {
-    num: "04", title: "データ分析・可視化",
-    description: "Excel・CSVを読み込んで分析。傾向把握、異常値検出、レポート生成を自動化。",
+    num: "03", title: "翻訳・多言語対応",
+    description: "100以上の言語に対応。技術文書もニュアンスを保った自然な翻訳。敬語・専門用語も的確に処理。",
+    iconKey: "globe", color: "#0d9488", bgColor: "#f0fdfa",
+    examples: ["技術仕様書の翻訳", "海外メール翻訳", "UIの多言語化"],
+  },
+  {
+    num: "04", title: "データ分析・構造化",
+    description: "Excel・CSVを読み込んで分析。傾向把握、異常値検出、レポート生成を自動化。非構造データの構造化も。",
     iconKey: "chart", color: "#059669", bgColor: "#ecfdf5",
-    examples: ["売上トレンド分析", "KPIダッシュボード", "品質データ分析"],
+    examples: ["売上トレンド分析", "KPIダッシュボード", "データ整理・構造化"],
   },
   {
-    num: "05", title: "リサーチ・調査",
-    description: "Web検索やドキュメント横断で情報収集。市場調査、競合分析、技術調査を効率化。",
-    iconKey: "search", color: "#dc2626", bgColor: "#fef2f2",
-    examples: ["市場動向の調査", "競合製品の比較", "特許・論文の要約"],
+    num: "05", title: "ブラウザ・PC操作自動化",
+    description: "Webブラウザの操作やPC上のファイル・アプリ操作をAIが代行。定型的な画面操作を自動化。",
+    iconKey: "monitor", color: "#4f46e5", bgColor: "#eef2ff",
+    examples: ["Web入力の自動化", "スクレイピング", "アプリ間データ転記"],
   },
   {
-    num: "06", title: "アイデア出し・企画立案",
-    description: "ブレインストーミングの相手として活用。企画書のたたき台、構成案、コピーライティングまで。",
-    iconKey: "lightbulb", color: "#d97706", bgColor: "#fffbeb",
-    examples: ["新サービス企画", "キャッチコピー生成", "プレゼン構成案"],
+    num: "06", title: "定期実行・スケジュール実行",
+    description: "毎日・毎週の定型タスクをスケジュール実行。レポート生成、データ収集、通知送信を自動で繰り返し。",
+    iconKey: "repeat", color: "#d97706", bgColor: "#fffbeb",
+    examples: ["日次レポート自動生成", "定期データ収集", "リマインダー通知"],
   },
   {
-    num: "07", title: "メール・コミュニケーション",
+    num: "07", title: "アプリへのAI組み込み (API)",
+    description: "自社アプリやWebサービスにAI機能をAPI経由で組み込み。チャットボット、自動分類、レコメンドなど。",
+    iconKey: "cpu", color: "#dc2626", bgColor: "#fef2f2",
+    examples: ["チャットボット構築", "自動分類機能", "レコメンドAPI"],
+  },
+  {
+    num: "08", title: "ドキュメント検索",
+    description: "社内文書を横断検索。PDF・Word・Excel・Notionなどを跨いで必要な情報を瞬時に発見。",
+    iconKey: "search", color: "#2563eb", bgColor: "#eff6ff",
+    examples: ["社内文書の横断検索", "過去議事録の検索", "マニュアル検索"],
+  },
+  {
+    num: "09", title: "メール・ビジネスコミュニケーション",
     description: "ビジネスメールのドラフト、返信提案、要件整理。適切なトーンと敬語で即座に文面作成。",
-    iconKey: "mail", color: "#2563eb", bgColor: "#eff6ff",
-    examples: ["顧客向けメール作成", "クレーム対応文", "社内連絡の整理"],
+    iconKey: "mail", color: "#059669", bgColor: "#ecfdf5",
+    examples: ["顧客メール作成", "クレーム対応文", "社内連絡の整理"],
   },
   {
-    num: "08", title: "教育・研修コンテンツ",
-    description: "研修資料、マニュアル、FAQ、クイズの作成。社員のスキルレベルに合わせたコンテンツ生成。",
-    iconKey: "bookOpen", color: "#059669", bgColor: "#ecfdf5",
-    examples: ["研修資料の作成", "操作マニュアル生成", "理解度テスト作成"],
+    num: "10", title: "ワークフロー設計・最適化",
+    description: "業務プロセスの可視化、ボトルネック特定、改善提案。既存フローの見直しと最適化をAIが支援。",
+    iconKey: "workflow", color: "#7c3aed", bgColor: "#f5f3ff",
+    examples: ["業務フロー分析", "改善提案", "プロセス可視化"],
   },
   {
-    num: "09", title: "法務・契約レビュー",
-    description: "契約書のリスク条項チェック、NDA・利用規約のドラフト。法的文書の読解と要約を支援。",
-    iconKey: "shield", color: "#7c3aed", bgColor: "#f5f3ff",
-    examples: ["契約書レビュー", "NDAドラフト", "利用規約チェック"],
+    num: "11", title: "リアルタイムWeb検索",
+    description: "最新のニュース、市場動向、技術トレンドをリアルタイムで検索・要約。常に最新情報をキャッチ。",
+    iconKey: "refresh", color: "#dc2626", bgColor: "#fef2f2",
+    examples: ["市場動向の調査", "競合情報の収集", "最新ニュース要約"],
   },
   {
-    num: "10", title: "カスタマーサポート",
-    description: "問い合わせ対応の下書き、FAQ自動生成、顧客データ分析。対応品質の均一化と速度向上。",
-    iconKey: "messageCircle", color: "#dc2626", bgColor: "#fef2f2",
-    examples: ["問い合わせ回答作成", "FAQ自動更新", "VOC分析"],
+    num: "12", title: "画像・動画生成",
+    description: "テキストから画像を生成。バナー、イラスト、プレゼン素材、動画のサムネイルなどビジュアル制作を支援。",
+    iconKey: "image", color: "#e11d48", bgColor: "#fff1f2",
+    examples: ["バナー画像生成", "プレゼン素材", "SNS投稿画像"],
+  },
+  {
+    num: "13", title: "音声認識・文字起こし",
+    description: "会議録音や音声メモを自動で文字起こし。議事録化、要約、アクションアイテム抽出まで一貫対応。",
+    iconKey: "mic", color: "#d97706", bgColor: "#fffbeb",
+    examples: ["会議の自動文字起こし", "音声メモ変換", "多言語音声翻訳"],
   },
 
-  /* ── 苦手を補完する6分野 ── */
+  /* ── 外部連携・ツール活用で広がる分野 ── */
   {
-    num: "11", title: "外部サービス連携",
-    description: "Slack通知、Gmail送信、カレンダー管理、スプレッドシート更新など外部APIと連携して業務を自動化。",
-    iconKey: "link", color: "#0891b2", bgColor: "#ecfeff",
-    examples: ["Slack通知の自動化", "API連携フロー", "SaaS間のデータ同期"],
+    num: "14", title: "チーム情報の集約・構造化・共有",
+    description: "Slack、メール、議事録、ドキュメントに散在する情報を集紀・構造化し、チーム全体で共有可能に。",
+    iconKey: "users", color: "#0891b2", bgColor: "#ecfeff",
+    examples: ["ナレッジ集約", "情報の構造化", "チーム共有ダッシュボード"],
     tag: "連携で拡張",
   },
   {
-    num: "12", title: "アプリ・ツール作成",
+    num: "15", title: "ワークフロー自動化基盤",
+    description: "N8N・Make・Zapierなどの自動化ツールとAIを組み合わせ、複雑な業務フローを完全自動化。",
+    iconKey: "zap", color: "#4f46e5", bgColor: "#eef2ff",
+    examples: ["承認フロー自動化", "データ連携パイプライン", "通知の自動化"],
+    tag: "連携で拡張",
+  },
+  {
+    num: "16", title: "AI API（代替・併用）",
+    description: "OpenAI、Google Gemini、Mistralなど複数のAI APIを用途に応じて使い分け・併用。最適なモデルを選択。",
+    iconKey: "layers", color: "#7c3aed", bgColor: "#f5f3ff",
+    examples: ["マルチモデル活用", "コスト最適化", "用途別API選定"],
+    tag: "連携で拡張",
+  },
+  {
+    num: "17", title: "外部サービス連携",
+    description: "Slack通知、Gmail送信、カレンダー管理、スプレッドシート更新など外部APIと連携して業務を自動化。",
+    iconKey: "link", color: "#0891b2", bgColor: "#ecfeff",
+    examples: ["Slack通知の自動化", "API連携フロー", "SaaS間データ同期"],
+    tag: "連携で拡張",
+  },
+  {
+    num: "18", title: "アプリ作成",
     description: "社内ツール、ダッシュボード、業務アプリを自然言語の指示だけで構築。プログラミング不要。",
     iconKey: "smartphone", color: "#4f46e5", bgColor: "#eef2ff",
     examples: ["社内ポータル構築", "在庫管理ツール", "日報入力アプリ"],
     tag: "連携で拡張",
   },
   {
-    num: "13", title: "UI・Webデザイン",
-    description: "Webページ、ランディングページ、管理画面のデザイン・実装。レスポンシブ対応も自動。",
+    num: "19", title: "UI・チラシなどのデザイン",
+    description: "Webページ、ランディングページ、販促チラシ、バナー、SNS投稿画像のデザイン・実装。Canva等と連携。",
     iconKey: "layout", color: "#c026d3", bgColor: "#fdf4ff",
-    examples: ["LP制作", "管理画面デザイン", "プロトタイプ作成"],
+    examples: ["LP制作", "販促チラシ制作", "バナーデザイン"],
     tag: "連携で拡張",
   },
   {
-    num: "14", title: "チラシ・グラフィックデザイン",
-    description: "販促チラシ、バナー、SNS投稿画像、プレゼン資料のビジュアルデザイン。Canva等と連携して高品質に。",
-    iconKey: "image", color: "#e11d48", bgColor: "#fff1f2",
-    examples: ["販促チラシ制作", "バナー画像生成", "SNS投稿デザイン"],
-    tag: "連携で拡張",
-  },
-  {
-    num: "15", title: "ファイル操作・管理",
-    description: "PDF結合・分割、Excel集計、Word整形、フォルダ整理。大量ファイルの一括処理も対応。",
+    num: "20", title: "ファイル操作・把握",
+    description: "PDF結合・分割、Excel集計、Word整形、フォルダ整理。大量ファイルの一括処理や内容把握も対応。",
     iconKey: "folder", color: "#ea580c", bgColor: "#fff7ed",
     examples: ["PDF結合・変換", "Excel一括集計", "ファイル自動整理"],
     tag: "連携で拡張",
   },
   {
-    num: "16", title: "ナレッジベース構築",
+    num: "21", title: "ナレッジベース構築",
     description: "社内文書・議事録・マニュアルからナレッジDBを構築。全社の情報資産を検索・活用可能に。",
     iconKey: "database", color: "#0d9488", bgColor: "#f0fdfa",
     examples: ["社内Wiki構築", "FAQ自動整備", "ノウハウの体系化"],
@@ -197,10 +235,11 @@ const capabilities: AiCapability[] = [
   },
 ]
 
+/* ───────────────────────── Data: 21 Use Cases ───────────────────────── */
 const useCases: UseCase[] = [
   {
-    id: "doc", category: "情報処理",
-    title: "図面・仕様書の検索と管理",
+    id: "doc", category: "文章作成",
+    title: "図面・仕様書の検索と要約",
     pain: "過去の図面を探すのに毎回30分以上かかる。英語の仕様書は読むだけで半日。",
     solution: "AIが社内文書を横断検索し、要約・翻訳を即座に実行。",
     claudeRole: "PDF・Wordの内容を瞬時に要約、英語仕様書を自然な日本語に翻訳、変更点を自動検出",
@@ -209,8 +248,28 @@ const useCases: UseCase[] = [
     iconKey: "clipboard", color: "#2563eb", bgColor: "#eff6ff",
   },
   {
-    id: "report", category: "レポート",
-    title: "品質レポート・報告書の自動生成",
+    id: "coding", category: "開発支援",
+    title: "社内ツールの高速開発",
+    pain: "簡単な社内ツールでも外注すると数ヶ月・数百万円。内製しようにもリソースが足りない。",
+    solution: "AIがコード生成・レビュー・テストを支援し、開発速度を5倍に。",
+    claudeRole: "要件からコード自動生成、バグの原因特定と修正案提示、テストコード自動生成",
+    tools: ["GitHub Copilot", "Claude Code"],
+    impact: "開発期間 80%短縮、外注コスト大幅削減",
+    iconKey: "code", color: "#7c3aed", bgColor: "#f5f3ff",
+  },
+  {
+    id: "translate", category: "翻訳",
+    title: "海外取引先とのコミュニケーション効率化",
+    pain: "英語メールの読み書きに時間がかかる。翻訳会社への依頼はコストと時間がかかりすぎる。",
+    solution: "AIが技術用語を含む文書も自然に翻訳。リアルタイムで多言語対応。",
+    claudeRole: "専門用語を含む技術文書の翻訳、ニュアンスを保ったメール翻訳、多言語FAQ生成",
+    tools: ["DeepL", "Google Translate API"],
+    impact: "翻訳時間 95%削減、翻訳コスト 90%削減",
+    iconKey: "globe", color: "#0d9488", bgColor: "#f0fdfa",
+  },
+  {
+    id: "data", category: "データ分析",
+    title: "品質データの自動分析・レポート生成",
     pain: "検査データの集計に2時間、報告書作成にさらに3時間。毎週の繰り返し。",
     solution: "データ投入だけでAIが集計・分析・報告書ドラフトまで自動生成。",
     claudeRole: "CSVデータの分析・集計、不良原因の分析レポートをドラフト、顧客向け報告書のフォーマット整形",
@@ -219,65 +278,176 @@ const useCases: UseCase[] = [
     iconKey: "chart", color: "#059669", bgColor: "#ecfdf5",
   },
   {
-    id: "order", category: "業務自動化",
-    title: "発注・在庫管理の自動化",
-    pain: "在庫確認→発注書作成→メール送信を手動で毎日。漏れやミスが頻発。",
-    solution: "在庫が閾値を下回ると自動で発注書を作成し、仕入先にメール送信。",
-    claudeRole: "発注書テンプレートの自動生成、仕入先メールの解析・分類、価格比較表の作成",
-    tools: ["N8N (自動化)", "Gmail"],
-    impact: "発注ミス ゼロ化、作業時間 95%削減",
-    iconKey: "cart", color: "#0d9488", bgColor: "#f0fdfa",
+    id: "browser", category: "PC自動化",
+    title: "Webブラウザ操作の自動化",
+    pain: "毎日同じサイトにログインしてデータをコピペする作業が1時間以上。ミスも多い。",
+    solution: "AIがブラウザを操作し、データ取得・入力・転記を完全自動化。",
+    claudeRole: "Webサイトからのデータ取得、フォーム自動入力、複数サイト間のデータ転記",
+    tools: ["Claude Computer Use", "Playwright"],
+    impact: "入力作業 100%自動化、ヒューマンエラー ゼロ",
+    iconKey: "monitor", color: "#4f46e5", bgColor: "#eef2ff",
   },
   {
-    id: "routine", category: "定型業務",
-    title: "日報・週報・申請書の自動化",
-    pain: "毎日30分の日報作成。週報は各メンバーの日報をまとめるだけで1時間以上。",
-    solution: "音声録音やメモから日報を自動生成。週報は日報データから自動集約。",
-    claudeRole: "テンプレートの自動入力、受信メールの優先度分類、各種申請書の下書き作成",
-    tools: ["Tipeless (音声)", "Notion"],
-    impact: "日報作成 30分 → 3分、週報集約 自動化",
-    iconKey: "clock", color: "#d97706", bgColor: "#fffbeb",
+    id: "schedule", category: "定期実行",
+    title: "日次・週次レポートの自動生成・配信",
+    pain: "毎朝のKPIレポートを手動で作成して配信。担当者が休むと遅延する。",
+    solution: "AIがスケジュールに従い自動でデータ収集→分析→レポート生成→Slack配信。",
+    claudeRole: "データソースからの自動収集、KPI分析とレポート文面作成、異常値の自動アラート",
+    tools: ["N8N", "Slack"],
+    impact: "レポート作成 完全自動化、配信遅延ゼロ",
+    iconKey: "repeat", color: "#d97706", bgColor: "#fffbeb",
+  },
+  {
+    id: "api", category: "API活用",
+    title: "自社アプリへのAIチャット機能組み込み",
+    pain: "顧客からの問い合わせ対応にコストがかかる。FAQページでは解決できない質問が多い。",
+    solution: "自社アプリにAIチャットボットをAPI経由で組み込み、24時間自動対応。",
+    claudeRole: "自然言語での質問理解、ナレッジベースからの回答生成、エスカレーション判断",
+    tools: ["Claude API", "Vercel"],
+    impact: "問い合わせ対応コスト 60%削減、顧客満足度向上",
+    iconKey: "cpu", color: "#dc2626", bgColor: "#fef2f2",
+  },
+  {
+    id: "docsearch", category: "検索",
+    title: "社内ナレッジの横断検索",
+    pain: "情報がNotionやDrive、メールに散在。必要な情報を見つけるのに平均20分かかる。",
+    solution: "AIが全ドキュメントを横断検索し、必要な情報を要約して即座に回答。",
+    claudeRole: "複数ソースの横断検索、関連文書のランキング、要約つき回答生成",
+    tools: ["NotebookLM", "Notion AI"],
+    impact: "情報検索時間 90%削減、ナレッジ活用率向上",
+    iconKey: "search", color: "#2563eb", bgColor: "#eff6ff",
+  },
+  {
+    id: "email", category: "コミュニケーション",
+    title: "ビジネスメールの自動ドラフト・分類",
+    pain: "メール対応に1日2時間。重要なメールが埋もれて対応漏れが発生。",
+    solution: "AIがメールを自動分類し、返信ドラフトを提案。重要メールは即座に通知。",
+    claudeRole: "メールの優先度分類、返信文面のドラフト、要件の自動抽出・タスク化",
+    tools: ["Gmail", "Slack"],
+    impact: "メール処理時間 70%削減、対応漏れゼロ",
+    iconKey: "mail", color: "#059669", bgColor: "#ecfdf5",
+  },
+  {
+    id: "workflow", category: "業務設計",
+    title: "業務プロセスの可視化と最適化",
+    pain: "業務フローが属人化して全体像が見えない。非劷率なプロセスが放置されている。",
+    solution: "AIが現行フローを分析し、ボトルネック特定と改善案を自動提案。",
+    claudeRole: "業務フローのヒアリング・構造化、ボトルネック分析、改善プランの自動生成",
+    tools: ["Miro", "Notion"],
+    impact: "プロセス改善の期間 60%短縮",
+    iconKey: "workflow", color: "#7c3aed", bgColor: "#f5f3ff",
+  },
+  {
+    id: "websearch", category: "調査",
+    title: "市場調査・競合分析の自動化",
+    pain: "市場レポートの作成に3日かかる。手動での情報収集は漏れが多い。",
+    solution: "AIがリアルタイムにWeb検索し、最新情報を収集・分析・レポート化。",
+    claudeRole: "最新ニュース・論文の自動収集、競合動向の要約、市場トレンドレポート生成",
+    tools: ["Perplexity", "Claude Web検索"],
+    impact: "調査時間 3日 → 2時間、情報の殡度向上",
+    iconKey: "refresh", color: "#dc2626", bgColor: "#fef2f2",
+  },
+  {
+    id: "imagegen", category: "画像生成",
+    title: "マーケティング素材の自動生成",
+    pain: "バナーやSNS画像の作成をデザイナーに依頼すると1週間待ち。急な施策に対応できない。",
+    solution: "AIでテキストからバナー・サムネイル・イラストを即座に生成。",
+    claudeRole: "プロンプトからの画像生成指示、ブランドガイドに沿ったデザイン提案、バリエーション生成",
+    tools: ["Midjourney", "DALL-E", "Canva"],
+    impact: "素材制作時間 90%短縮、デザインコスト削減",
+    iconKey: "image", color: "#e11d48", bgColor: "#fff1f2",
   },
   {
     id: "voice", category: "音声活用",
     title: "会議・現場音声の自動議事録化",
-    pain: "会議の議事録係は内容に集中できない。現場の口頭報告は記録に残らない。",
+    pain: "会議の議事録俜は内容に集中できない。現場の口頭報告は記録に残らない。",
     solution: "録音するだけで文字起こし→要約→アクションアイテム抽出→Notionに自動保存。",
     claudeRole: "文字起こしテキストの整形・要約、アクションアイテムの自動抽出、議事録フォーマットへの変換",
     tools: ["Tipeless", "Notion"],
     impact: "議事録作成 自動化、情報共有のタイムラグ ゼロ",
-    iconKey: "mic", color: "#dc2626", bgColor: "#fef2f2",
+    iconKey: "mic", color: "#d97706", bgColor: "#fffbeb",
   },
   {
-    id: "plan", category: "計画・管理",
-    title: "生産計画・工程管理の最適化",
-    pain: "工程間の依存関係が複雑で、ボトルネックの特定が属人化。計画変更のたびに全体調整。",
-    solution: "AIが生産データからボトルネックを特定し、工程の最適化を提案。",
-    claudeRole: "生産データからボトルネックを特定、作業指示書の自動生成、工程間の依存関係を分析",
-    tools: ["Notion (ダッシュボード)", "N8N (通知)"],
-    impact: "計画策定時間 70%削減、工程遅延 50%削減",
-    iconKey: "settings", color: "#7c3aed", bgColor: "#f5f3ff",
+    id: "team", category: "チーム共有",
+    title: "チームナレッジの集約と構造化",
+    pain: "情報がSlack・メール・議事録に分散。新メンバーのオンボーディングに1ヶ月かかる。",
+    solution: "AIが各チャネルの情報を自動集約・構造化し、検索可能なナレッジに変換。",
+    claudeRole: "Slack・メールの重要情報抽出、情報の分類・構造化、オンボーディング資料の自動生成",
+    tools: ["Slack", "Notion", "NotebookLM"],
+    impact: "オンボーディング期間 60%短縮、情報共有率向上",
+    iconKey: "users", color: "#0891b2", bgColor: "#ecfeff",
+  },
+  {
+    id: "automation", category: "自動化基盤",
+    title: "承認フロー・通知の完全自動化",
+    pain: "経費精算の承認に3日かかる。承認状況の確認で何度もメール。",
+    solution: "N8N + AIで承認フロー全体を自動化。申請→チェック→承認→通知をワンストップ。",
+    claudeRole: "申請内容の自動チェック、承認基準との照合、異常値の検出とアラート",
+    tools: ["N8N", "Slack", "Google Sheets"],
+    impact: "承認リードタイム 80%短縮、手動チェック不要",
+    iconKey: "zap", color: "#4f46e5", bgColor: "#eef2ff",
+  },
+  {
+    id: "multimodel", category: "AI API",
+    title: "用途別のAIモデル使い分け",
+    pain: "1つのAIだけでは全ての業務に最適ではない。コストと品質のバランスが難しい。",
+    solution: "用途に応じてClaude・GPT・Geminiなど複数モデルを使い分け、最適なコスト・品質を実現。",
+    claudeRole: "タスク分析と最適モデルの選定、APIルーティングの設計、コスト最適化の提案",
+    tools: ["Claude API", "OpenAI API", "Gemini API"],
+    impact: "AI活用コスト 40%削減、タスク適合度向上",
+    iconKey: "layers", color: "#7c3aed", bgColor: "#f5f3ff",
+  },
+  {
+    id: "integration", category: "サービス連携",
+    title: "SaaS間のデータ連携自動化",
+    pain: "営業データをCRMからスプシに手動転記。月末の集計は丸1日がかり。",
+    solution: "AIがSaaS間のデータを自動連携。転記・集計・レポートまでノーコードで実現。",
+    claudeRole: "API連携フローの設計、データ変換ルールの生成、異常データの検出・通知",
+    tools: ["N8N", "Zapier", "Google Sheets"],
+    impact: "データ転記 100%自動化、集計時間 90%削減",
+    iconKey: "link", color: "#0891b2", bgColor: "#ecfeff",
+  },
+  {
+    id: "appbuild", category: "アプリ作成",
+    title: "ノーコードで社内業務アプリ構築",
+    pain: "現場から「こんなツールが欲しい」と要望があっても、IT部門の対応待ちで数ヶ月。",
+    solution: "AIに自然言語で指示するだけで業務アプリを構築。プログラミング不要。",
+    claudeRole: "要件の整理・設計、アプリコードの自動生成、UIデザインの提案",
+    tools: ["Claude Artifacts", "Vercel", "Supabase"],
+    impact: "アプリ構築 数ヶ月 → 数日、IT部門の負荷軽減",
+    iconKey: "smartphone", color: "#4f46e5", bgColor: "#eef2ff",
+  },
+  {
+    id: "design", category: "デザイン",
+    title: "販促チラシ・Webページのデザイン",
+    pain: "デザイナーへの外注は高額で、納品まで2週間。ちょっとした修正にも時間がかかる。",
+    solution: "AIがデザイン案を即座に生成。Canvaと連携して高品質なチラシ・LPを内製化。",
+    claudeRole: "デザインコンセプトの提案、HTML/CSSコードの自動生成、レスポンシブ対応",
+    tools: ["Canva", "Figma", "Claude Artifacts"],
+    impact: "デザイン制作時間 85%短縮、外注コスト大幅削減",
+    iconKey: "layout", color: "#c026d3", bgColor: "#fdf4ff",
+  },
+  {
+    id: "fileops", category: "ファイル操作",
+    title: "大量ファイルの一括処理・整理",
+    pain: "月末に数百枚のPDFを結合・リネーム。Excelファイルの集計も手作業で丸2日。",
+    solution: "AIがファイルの一括結合・分割・リネーム・集計を自動処理。",
+    claudeRole: "PDF結合・分割の自動実行、Excel一括集計・フォーマット変換、フォルダ構造の自動整理",
+    tools: ["Claude Desktop", "Python"],
+    impact: "ファイル処理時間 95%削減、手作業ミス ゼロ",
+    iconKey: "folder", color: "#ea580c", bgColor: "#fff7ed",
+  },
+  {
+    id: "knowledge", category: "ナレッジ",
+    title: "社内ナレッジベースの構築と運用",
+    pain: "退職者のノウハウが消失。同じ質問が繰り返されるが、回答がどこにもまとまっていない。",
+    solution: "AIが社内文書・議事録からナレッジDBを自動構築。質問に即座に回答。",
+    claudeRole: "文書からのナレッジ抽出・分類、FAQの自動生成・更新、質問応答チャットボット",
+    tools: ["NotebookLM", "Notion", "Supabase"],
+    impact: "ナレッジ検索時間 90%削減、ノウハウ消失の防止",
+    iconKey: "database", color: "#0d9488", bgColor: "#f0fdfa",
   },
 ]
-
-/* ───────────────────────── Animated Counter ───────────────────────── */
-function AnimatedNumber({ value, suffix = "", delay = 0 }: { value: number; suffix?: string; delay?: number }) {
-  const [display, setDisplay] = useState(0)
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      const duration = 1200; const start = performance.now()
-      const tick = (now: number) => {
-        const progress = Math.min((now - start) / duration, 1)
-        const eased = 1 - Math.pow(1 - progress, 3)
-        setDisplay(Math.round(eased * value))
-        if (progress < 1) requestAnimationFrame(tick)
-      }
-      requestAnimationFrame(tick)
-    }, 300 + delay)
-    return () => clearTimeout(timer)
-  }, [value, delay])
-  return <span style={{ fontVariantNumeric: "tabular-nums" }}>{display}{suffix}</span>
-}
 
 /* ───────────────────────── Section Component ───────────────────────── */
 function Section({ children, id }: { children: React.ReactNode; id?: string }) {
@@ -378,87 +548,33 @@ export default function UseCasesPage() {
         <StickyNav activeSection={activeSection} />
 
         <div style={{ maxWidth: 1080, margin: "0 auto", padding: "0 24px" }}>
-          {/* ─── Hero ─── */}
-          <div style={{ textAlign: "center", padding: "64px 0 48px" }}>
-            <motion.div
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-            >
-              <span style={{
-                display: "inline-flex", alignItems: "center", gap: 6,
-                padding: "4px 12px", borderRadius: 100,
-                background: "var(--color-bg-muted)", border: "1px solid var(--color-border)",
-                fontSize: 12, fontWeight: 500, color: "var(--color-text-muted)",
-                marginBottom: 16,
-              }}>
-                <Icon d={icons.sparkle} size={14} color="var(--color-primary)" />
-                社内検討資料
-              </span>
-            </motion.div>
-
-            <motion.h1
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.1 }}
-              style={{
-                fontSize: 36, fontWeight: 700, lineHeight: 1.3,
-                color: "var(--color-text)", margin: "16px 0 12px",
-                letterSpacing: "-0.02em",
-              }}
-            >
-              AIで変わる、<br />これからの業務
-            </motion.h1>
-
-            <motion.p
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-              style={{
-                fontSize: 15, color: "var(--color-text-muted)",
-                maxWidth: 520, margin: "0 auto", lineHeight: 1.7,
-              }}
-            >
-              AIは「未来の技術」ではなく「今日から使えるツール」です。<br />
-              得意な10分野と、外部連携で広がる6分野をご紹介します。
-            </motion.p>
-
-            {/* Metrics */}
-            <motion.div
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.3 }}
-              style={{
-                display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 16,
-                maxWidth: 560, margin: "32px auto 0",
-              }}
-            >
-              {[
-                { value: 16, suffix: "分野", label: "AIが活用できる業務領域" },
-                { value: 70, suffix: "%", label: "定型業務の削減可能率" },
-                { value: 5, suffix: "時間/週", label: "1人あたりの時間創出" },
-              ].map((m, i) => (
-                <div key={i} style={{
-                  padding: 16, borderRadius: 12,
-                  background: "var(--color-bg-subtle)", border: "1px solid var(--color-border)",
-                }}>
-                  <p style={{ fontSize: 28, fontWeight: 600, color: "var(--color-primary)", margin: 0, lineHeight: 1 }}>
-                    <AnimatedNumber value={m.value} suffix={m.suffix} delay={i * 150} />
-                  </p>
-                  <p style={{ fontSize: 11, color: "var(--color-text-muted)", margin: "8px 0 0" }}>{m.label}</p>
-                </div>
-              ))}
-            </motion.div>
-          </div>
 
           {/* ─── Section 1: AIができること ─── */}
           <Section id="capabilities">
-            <h2 style={{ fontSize: 22, fontWeight: 600, marginBottom: 8 }}>AIができること</h2>
-            <p style={{ fontSize: 14, color: "var(--color-text-muted)", marginBottom: 12 }}>
-              AIが得意な10分野と、外部サービス連携で実現する6分野。合計16の業務領域をカバーします。
-            </p>
+            <div style={{ paddingTop: 48 }}>
+              <motion.div
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+                style={{ marginBottom: 8 }}
+              >
+                <span style={{
+                  display: "inline-flex", alignItems: "center", gap: 6,
+                  padding: "4px 12px", borderRadius: 100,
+                  background: "var(--color-bg-muted)", border: "1px solid var(--color-border)",
+                  fontSize: 12, fontWeight: 500, color: "var(--color-text-muted)",
+                }}>
+                  <Icon d={icons.sparkle} size={14} color="var(--color-primary)" />
+                  社内検討資料
+                </span>
+              </motion.div>
+              <h2 style={{ fontSize: 26, fontWeight: 700, marginBottom: 8 }}>AIができること</h2>
+              <p style={{ fontSize: 14, color: "var(--color-text-muted)", marginBottom: 12 }}>
+                AIが得意な13分野と、外部サービス連携で実現する8分野。合計21の業務領域をカバーします。
+              </p>
+            </div>
 
-            {/* Sub-header: 得意な10分野 */}
+            {/* Sub-header: AI得意分野 */}
             <div style={{
               display: "flex", alignItems: "center", gap: 8, marginBottom: 16, marginTop: 24,
             }}>
@@ -467,15 +583,15 @@ export default function UseCasesPage() {
                 background: "#eff6ff", border: "1px solid #bfdbfe",
                 fontSize: 12, fontWeight: 600, color: "#2563eb",
               }}>
-                AI得意分野
+                AI得意分量
               </span>
               <span style={{ fontSize: 13, color: "var(--color-text-muted)" }}>
-                — テキスト・分析・生成が中心の10領域
+                — テキスト・分析・生成・操作が中心の13領域
               </span>
             </div>
 
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))", gap: 16 }}>
-              {capabilities.slice(0, 10).map((cap, i) => (
+              {capabilities.slice(0, 13).map((cap, i) => (
                 <motion.div
                   key={cap.num}
                   initial={{ opacity: 0, y: 16 }}
@@ -520,7 +636,7 @@ export default function UseCasesPage() {
               ))}
             </div>
 
-            {/* Sub-header: 苦手を補完する6分野 */}
+            {/* Sub-header: 連携で拡張する8分野 */}
             <div style={{
               display: "flex", alignItems: "center", gap: 8, marginBottom: 16, marginTop: 40,
             }}>
@@ -532,12 +648,12 @@ export default function UseCasesPage() {
                 連携で拡張
               </span>
               <span style={{ fontSize: 13, color: "var(--color-text-muted)" }}>
-                — 外部サービスやツールとの組み合わせで実現する6領域
+                — 外部サービスやツールとの組み合わせで実現する8᠘域
               </span>
             </div>
 
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))", gap: 16 }}>
-              {capabilities.slice(10).map((cap, i) => (
+              {capabilities.slice(13).map((cap, i) => (
                 <motion.div
                   key={cap.num}
                   initial={{ opacity: 0, y: 16 }}
@@ -694,7 +810,7 @@ export default function UseCasesPage() {
                               </div>
                               <div style={{ marginBottom: 16 }}>
                                 <p style={{ fontSize: 12, fontWeight: 600, color: "var(--color-text-muted)", marginBottom: 6 }}>連携ツール</p>
-                                <div style={{ display: "flex", gap: 6 }}>
+                                <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
                                   {uc.tools.map((t) => (
                                     <span key={t} style={{
                                       padding: "3px 10px", borderRadius: 100,
