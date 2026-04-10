@@ -83,6 +83,8 @@ interface UseCase {
   bgColor: string
 }
 
+type CapabilityCategory = "understand" | "create" | "operate" | "integrate"
+
 interface AiCapability {
   num: string
   title: string
@@ -91,147 +93,206 @@ interface AiCapability {
   color: string
   bgColor: string
   examples: string[]
-  tag?: string
+  category: CapabilityCategory
 }
+
+const capabilityCategories: {
+  key: CapabilityCategory
+  label: string
+  sub: string
+  color: string
+  bgColor: string
+  borderColor: string
+}[] = [
+  {
+    key: "understand",
+    label: "情報を読み解く",
+    sub: "— 社内外の情報を集めて、理解・分析する5領域",
+    color: "#2563eb",
+    bgColor: "#eff6ff",
+    borderColor: "#bfdbfe",
+  },
+  {
+    key: "create",
+    label: "コンテンツを生み出す",
+    sub: "— 文章・コード・ビジュアル・アプリを作り出す6領域",
+    color: "#7c3aed",
+    bgColor: "#f5f3ff",
+    borderColor: "#ddd6fe",
+  },
+  {
+    key: "operate",
+    label: "業務を動かす",
+    sub: "— 操作・実行・連携で業務プロセスを自動化する6領域",
+    color: "#059669",
+    bgColor: "#ecfdf5",
+    borderColor: "#a7f3d0",
+  },
+  {
+    key: "integrate",
+    label: "基盤・組み込み",
+    sub: "— AIを自社システムやナレッジに組み込む4領域",
+    color: "#ea580c",
+    bgColor: "#fff7ed",
+    borderColor: "#fed7aa",
+  },
+]
 
 /* ───────────────────────── Data: 21 AI Capabilities ───────────────────────── */
 const capabilities: AiCapability[] = [
-  /* ── AI得意分野（テキスト・分析・生成が中心）── */
+  /* ── 情報を読み解く（5）── */
   {
-    num: "01", title: "文章作成・要約・レポート",
-    description: "報告書、議事録、提案書、メール文面を瞬時に生成。長文PDFの要約や社内ナレッジの構造化も。",
-    iconKey: "file", color: "#2563eb", bgColor: "#eff6ff",
-    examples: ["報告書ドラフト", "議事録の要約", "レポート自動生成"],
-  },
-  {
-    num: "02", title: "コーディング・開発支援",
-    description: "コード生成、バグ修正、コードレビュー、テスト自動生成。フルスタック対応で開発速度を飛躍的に向上。",
-    iconKey: "code", color: "#7c3aed", bgColor: "#f5f3ff",
-    examples: ["Webアプリ構築", "API実装", "自動テスト生成"],
-  },
-  {
-    num: "03", title: "翻訳・多言語対応",
-    description: "100以上の言語に対応。技術文書もニュアンスを保った自然な翻訳。敬語・専門用語も的確に処理。",
-    iconKey: "globe", color: "#0d9488", bgColor: "#f0fdfa",
-    examples: ["技術仕様書の翻訳", "海外メール翻訳", "UIの多言語化"],
-  },
-  {
-    num: "04", title: "データ分析・構造化",
-    description: "Excel・CSVを読み込んで分析。傾向把握、異常値検出、レポート生成を自動化。非構造データの構造化も。",
-    iconKey: "chart", color: "#059669", bgColor: "#ecfdf5",
-    examples: ["売上トレンド分析", "KPIダッシュボード", "データ整理・構造化"],
-  },
-  {
-    num: "05", title: "ブラウザ・PC操作自動化",
-    description: "Webブラウザの操作やPC上のファイル・アプリ操作をAIが代行。定型的な画面操作を自動化。",
-    iconKey: "monitor", color: "#4f46e5", bgColor: "#eef2ff",
-    examples: ["Web入力の自動化", "スクレイピング", "アプリ間データ転記"],
-  },
-  {
-    num: "06", title: "定期実行・スケジュール実行",
-    description: "毎日・毎週の定型タスクをスケジュール実行。レポート生成、データ収集、通知送信を自動で繰り返し。",
-    iconKey: "repeat", color: "#d97706", bgColor: "#fffbeb",
-    examples: ["日次レポート自動生成", "定期データ収集", "リマインダー通知"],
-  },
-  {
-    num: "07", title: "アプリへのAI組み込み (API)",
-    description: "自社アプリやWebサービスにAI機能をAPI経由で組み込み。チャットボット、自動分類、レコメンドなど。",
-    iconKey: "cpu", color: "#dc2626", bgColor: "#fef2f2",
-    examples: ["チャットボット構築", "自動分類機能", "レコメンドAPI"],
-  },
-  {
-    num: "08", title: "ドキュメント検索",
-    description: "社内文書を横断検索。PDF・Word・Excel・Notionなどを跨いで必要な情報を瞬時に発見。",
-    iconKey: "search", color: "#2563eb", bgColor: "#eff6ff",
-    examples: ["社内文書の横断検索", "過去議事録の検索", "マニュアル検索"],
-  },
-  {
-    num: "09", title: "メール・ビジネスコミュニケーション",
-    description: "ビジネスメールのドラフト、返信提案、要件整理。適切なトーンと敬語で即座に文面作成。",
-    iconKey: "mail", color: "#059669", bgColor: "#ecfdf5",
-    examples: ["顧客メール作成", "クレーム対応文", "社内連絡の整理"],
-  },
-  {
-    num: "10", title: "ワークフロー設計・最適化",
-    description: "業務プロセスの可視化、ボトルネック特定、改善提案。既存フローの見直しと最適化をAIが支援。",
-    iconKey: "workflow", color: "#7c3aed", bgColor: "#f5f3ff",
-    examples: ["業務フロー分析", "改善提案", "プロセス可視化"],
-  },
-  {
-    num: "11", title: "リアルタイムWeb検索",
+    num: "01", title: "リアルタイムWeb検索",
     description: "最新のニュース、市場動向、技術トレンドをリアルタイムで検索・要約。常に最新情報をキャッチ。",
     iconKey: "refresh", color: "#dc2626", bgColor: "#fef2f2",
     examples: ["市場動向の調査", "競合情報の収集", "最新ニュース要約"],
+    category: "understand",
   },
   {
-    num: "12", title: "画像・動画生成",
-    description: "テキストから画像を生成。バナー、イラスト、プレゼン素材、動画のサムネイルなどビジュアル制作を支援。",
-    iconKey: "image", color: "#e11d48", bgColor: "#fff1f2",
-    examples: ["バナー画像生成", "プレゼン素材", "SNS投稿画像"],
-  },
-  {
-    num: "13", title: "音声認識・文字起こし",
+    num: "02", title: "音声認識・文字起こし",
     description: "会議録音や音声メモを自動で文字起こし。議事録化、要約、アクションアイテム抽出まで一貫対応。",
     iconKey: "mic", color: "#d97706", bgColor: "#fffbeb",
     examples: ["会議の自動文字起こし", "音声メモ変換", "多言語音声翻訳"],
+    category: "understand",
+  },
+  {
+    num: "03", title: "ドキュメント検索",
+    description: "社内文書を横断検索。PDF・Word・Excel・Notionなどを跨いで必要な情報を瞬時に発見。",
+    iconKey: "search", color: "#2563eb", bgColor: "#eff6ff",
+    examples: ["社内文書の横断検索", "過去議事録の検索", "マニュアル検索"],
+    category: "understand",
+  },
+  {
+    num: "04", title: "翻訳・多言語対応",
+    description: "100以上の言語に対応。技術文書もニュアンスを保った自然な翻訳。敬語・専門用語も的確に処理。",
+    iconKey: "globe", color: "#0d9488", bgColor: "#f0fdfa",
+    examples: ["技術仕様書の翻訳", "海外メール翻訳", "UIの多言語化"],
+    category: "understand",
+  },
+  {
+    num: "05", title: "データ分析・構造化",
+    description: "Excel・CSVを読み込んで分析。傾向把握、異常値検出、レポート生成を自動化。非構造データの構造化も。",
+    iconKey: "chart", color: "#059669", bgColor: "#ecfdf5",
+    examples: ["売上トレンド分析", "KPIダッシュボード", "データ整理・構造化"],
+    category: "understand",
   },
 
-  /* ── 外部連携・ツール活用で広がる分野 ── */
+  /* ── コンテンツを生み出す（6）── */
   {
-    num: "14", title: "チーム情報の集約・構造化・共有",
-    description: "Slack、メール、議事録、ドキュメントに散在する情報を集紀・構造化し、チーム全体で共有可能に。",
-    iconKey: "users", color: "#0891b2", bgColor: "#ecfeff",
-    examples: ["ナレッジ集約", "情報の構造化", "チーム共有ダッシュボード"],
-    tag: "連携で拡張",
+    num: "06", title: "文章作成・要約・レポート",
+    description: "報告書、議事録、提案書、メール文面を瞬時に生成。長文PDFの要約や社内ナレッジの構造化も。",
+    iconKey: "file", color: "#2563eb", bgColor: "#eff6ff",
+    examples: ["報告書ドラフト", "議事録の要約", "レポート自動生成"],
+    category: "create",
+  },
+  {
+    num: "07", title: "メール・ビジネスコミュニケーション",
+    description: "ビジネスメールのドラフト、返信提案、要件整理。適切なトーンと敬語で即座に文面作成。",
+    iconKey: "mail", color: "#059669", bgColor: "#ecfdf5",
+    examples: ["顧客メール作成", "クレーム対応文", "社内連絡の整理"],
+    category: "create",
+  },
+  {
+    num: "08", title: "コーディング・開発支援",
+    description: "コード生成、バグ修正、コードレビュー、テスト自動生成。フルスタック対応で開発速度を飛躍的に向上。",
+    iconKey: "code", color: "#7c3aed", bgColor: "#f5f3ff",
+    examples: ["Webアプリ構築", "API実装", "自動テスト生成"],
+    category: "create",
+  },
+  {
+    num: "09", title: "画像・動画生成",
+    description: "テキストから画像を生成。バナー、イラスト、プレゼン素材、動画のサムネイルなどビジュアル制作を支援。",
+    iconKey: "image", color: "#e11d48", bgColor: "#fff1f2",
+    examples: ["バナー画像生成", "プレゼン素材", "SNS投稿画像"],
+    category: "create",
+  },
+  {
+    num: "10", title: "UI・チラシなどのデザイン",
+    description: "Webページ、ランディングページ、販促チラシ、バナー、SNS投稿画像のデザイン・実装。Canva等と連携。",
+    iconKey: "layout", color: "#c026d3", bgColor: "#fdf4ff",
+    examples: ["LP制作", "販促チラシ制作", "バナーデザイン"],
+    category: "create",
+  },
+  {
+    num: "11", title: "アプリ作成",
+    description: "社内ツール、ダッシュボード、業務アプリを自然言語の指示だけで構築。プログラミング不要。",
+    iconKey: "smartphone", color: "#4f46e5", bgColor: "#eef2ff",
+    examples: ["社内ポータル構築", "在庫管理ツール", "日報入力アプリ"],
+    category: "create",
+  },
+
+  /* ── 業務を動かす（6）── */
+  {
+    num: "12", title: "ブラウザ・PC操作自動化",
+    description: "Webブラウザの操作やPC上のファイル・アプリ操作をAIが代行。定型的な画面操作を自動化。",
+    iconKey: "monitor", color: "#4f46e5", bgColor: "#eef2ff",
+    examples: ["Web入力の自動化", "スクレイピング", "アプリ間データ転記"],
+    category: "operate",
+  },
+  {
+    num: "13", title: "定期実行・スケジュール実行",
+    description: "毎日・毎週の定型タスクをスケジュール実行。レポート生成、データ収集、通知送信を自動で繰り返し。",
+    iconKey: "repeat", color: "#d97706", bgColor: "#fffbeb",
+    examples: ["日次レポート自動生成", "定期データ収集", "リマインダー通知"],
+    category: "operate",
+  },
+  {
+    num: "14", title: "ワークフロー設計・最適化",
+    description: "業務プロセスの可視化、ボトルネック特定、改善提案。既存フローの見直しと最適化をAIが支援。",
+    iconKey: "workflow", color: "#7c3aed", bgColor: "#f5f3ff",
+    examples: ["業務フロー分析", "改善提案", "プロセス可視化"],
+    category: "operate",
   },
   {
     num: "15", title: "ワークフロー自動化基盤",
     description: "N8N・Make・Zapierなどの自動化ツールとAIを組み合わせ、複雑な業務フローを完全自動化。",
     iconKey: "zap", color: "#4f46e5", bgColor: "#eef2ff",
     examples: ["承認フロー自動化", "データ連携パイプライン", "通知の自動化"],
-    tag: "連携で拡張",
+    category: "operate",
   },
   {
-    num: "16", title: "AI API（代替・併用）",
-    description: "OpenAI、Google Gemini、Mistralなど複数のAI APIを用途に応じて使い分け・併用。最適なモデルを選択。",
-    iconKey: "layers", color: "#7c3aed", bgColor: "#f5f3ff",
-    examples: ["マルチモデル活用", "コスト最適化", "用途別API選定"],
-    tag: "連携で拡張",
-  },
-  {
-    num: "17", title: "外部サービス連携",
+    num: "16", title: "外部サービス連携",
     description: "Slack通知、Gmail送信、カレンダー管理、スプレッドシート更新など外部APIと連携して業務を自動化。",
     iconKey: "link", color: "#0891b2", bgColor: "#ecfeff",
     examples: ["Slack通知の自動化", "API連携フロー", "SaaS間データ同期"],
-    tag: "連携で拡張",
+    category: "operate",
   },
   {
-    num: "18", title: "アプリ作成",
-    description: "社内ツール、ダッシュボード、業務アプリを自然言語の指示だけで構築。プログラミング不要。",
-    iconKey: "smartphone", color: "#4f46e5", bgColor: "#eef2ff",
-    examples: ["社内ポータル構築", "在庫管理ツール", "日報入力アプリ"],
-    tag: "連携で拡張",
-  },
-  {
-    num: "19", title: "UI・チラシなどのデザイン",
-    description: "Webページ、ランディングページ、販促チラシ、バナー、SNS投稿画像のデザイン・実装。Canva等と連携。",
-    iconKey: "layout", color: "#c026d3", bgColor: "#fdf4ff",
-    examples: ["LP制作", "販促チラシ制作", "バナーデザイン"],
-    tag: "連携で拡張",
-  },
-  {
-    num: "20", title: "ファイル操作・把握",
+    num: "17", title: "ファイル操作・把握",
     description: "PDF結合・分割、Excel集計、Word整形、フォルダ整理。大量ファイルの一括処理や内容把握も対応。",
     iconKey: "folder", color: "#ea580c", bgColor: "#fff7ed",
     examples: ["PDF結合・変換", "Excel一括集計", "ファイル自動整理"],
-    tag: "連携で拡張",
+    category: "operate",
+  },
+
+  /* ── 基盤・組み込み（4）── */
+  {
+    num: "18", title: "アプリへのAI組み込み (API)",
+    description: "自社アプリやWebサービスにAI機能をAPI経由で組み込み。チャットボット、自動分類、レコメンドなど。",
+    iconKey: "cpu", color: "#dc2626", bgColor: "#fef2f2",
+    examples: ["チャットボット構築", "自動分類機能", "レコメンドAPI"],
+    category: "integrate",
+  },
+  {
+    num: "19", title: "AI API（代替・併用）",
+    description: "OpenAI、Google Gemini、Mistralなど複数のAI APIを用途に応じて使い分け・併用。最適なモデルを選択。",
+    iconKey: "layers", color: "#7c3aed", bgColor: "#f5f3ff",
+    examples: ["マルチモデル活用", "コスト最適化", "用途別API選定"],
+    category: "integrate",
+  },
+  {
+    num: "20", title: "チーム情報の集約・構造化・共有",
+    description: "Slack、メール、議事録、ドキュメントに散在する情報を集約・構造化し、チーム全体で共有可能に。",
+    iconKey: "users", color: "#0891b2", bgColor: "#ecfeff",
+    examples: ["ナレッジ集約", "情報の構造化", "チーム共有ダッシュボード"],
+    category: "integrate",
   },
   {
     num: "21", title: "ナレッジベース構築",
     description: "社内文書・議事録・マニュアルからナレッジDBを構築。全社の情報資産を検索・活用可能に。",
     iconKey: "database", color: "#0d9488", bgColor: "#f0fdfa",
     examples: ["社内Wiki構築", "FAQ自動整備", "ノウハウの体系化"],
-    tag: "連携で拡張",
+    category: "integrate",
   },
 ]
 
@@ -330,7 +391,7 @@ const useCases: UseCase[] = [
   {
     id: "workflow", category: "業務設計",
     title: "業務プロセスの可視化と最適化",
-    pain: "業務フローが属人化して全体像が見えない。非劷率なプロセスが放置されている。",
+    pain: "業務フローが属人化して全体像が見えない。非効率なプロセスが放置されている。",
     solution: "AIが現行フローを分析し、ボトルネック特定と改善案を自動提案。",
     claudeRole: "業務フローのヒアリング・構造化、ボトルネック分析、改善プランの自動生成",
     tools: ["Miro", "Notion"],
@@ -344,7 +405,7 @@ const useCases: UseCase[] = [
     solution: "AIがリアルタイムにWeb検索し、最新情報を収集・分析・レポート化。",
     claudeRole: "最新ニュース・論文の自動収集、競合動向の要約、市場トレンドレポート生成",
     tools: ["Perplexity", "Claude Web検索"],
-    impact: "調査時間 3日 → 2時間、情報の殡度向上",
+    impact: "調査時間 3日 → 2時間、情報の鮮度向上",
     iconKey: "refresh", color: "#dc2626", bgColor: "#fef2f2",
   },
   {
@@ -360,7 +421,7 @@ const useCases: UseCase[] = [
   {
     id: "voice", category: "音声活用",
     title: "会議・現場音声の自動議事録化",
-    pain: "会議の議事録俜は内容に集中できない。現場の口頭報告は記録に残らない。",
+    pain: "会議の議事録係は内容に集中できない。現場の口頭報告は記録に残らない。",
     solution: "録音するだけで文字起こし→要約→アクションアイテム抽出→Notionに自動保存。",
     claudeRole: "文字起こしテキストの整形・要約、アクションアイテムの自動抽出、議事録フォーマットへの変換",
     tools: ["Tipeless", "Notion"],
@@ -570,143 +631,79 @@ export default function UseCasesPage() {
               </motion.div>
               <h2 style={{ fontSize: 26, fontWeight: 700, marginBottom: 8 }}>AIができること</h2>
               <p style={{ fontSize: 14, color: "var(--color-text-muted)", marginBottom: 12 }}>
-                AIが得意な13分野と、外部サービス連携で実現する8分野。合計21の業務領域をカバーします。
+                「読む・作る・動かす・組み込む」の4カテゴリー、合計21の業務領域をAIがカバーします。
               </p>
             </div>
 
-            {/* Sub-header: AI得意分野 */}
-            <div style={{
-              display: "flex", alignItems: "center", gap: 8, marginBottom: 16, marginTop: 24,
-            }}>
-              <span style={{
-                padding: "3px 10px", borderRadius: 100,
-                background: "#eff6ff", border: "1px solid #bfdbfe",
-                fontSize: 12, fontWeight: 600, color: "#2563eb",
-              }}>
-                AI得意分量
-              </span>
-              <span style={{ fontSize: 13, color: "var(--color-text-muted)" }}>
-                — テキスト・分析・生成・操作が中心の13領域
-              </span>
-            </div>
-
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))", gap: 16 }}>
-              {capabilities.slice(0, 13).map((cap, i) => (
-                <motion.div
-                  key={cap.num}
-                  initial={{ opacity: 0, y: 16 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: i * 0.05 }}
-                  style={{
-                    padding: 24, borderRadius: 12,
-                    background: "var(--color-bg)",
-                    border: "1px solid var(--color-border)",
-                    cursor: "default",
-                    transition: "border-color 150ms ease, box-shadow 150ms ease",
-                  }}
-                  whileHover={{ borderColor: "var(--color-border-strong)", boxShadow: "0 2px 8px rgba(0,0,0,0.06)" }}
-                >
-                  <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 12 }}>
-                    <div style={{
-                      width: 40, height: 40, borderRadius: 10,
-                      background: cap.bgColor, display: "flex", alignItems: "center", justifyContent: "center",
-                    }}>
-                      <Icon d={icons[cap.iconKey]} size={20} color={cap.color} />
-                    </div>
-                    <div>
-                      <span style={{ fontSize: 11, fontWeight: 600, color: cap.color }}>{cap.num}</span>
-                      <h3 style={{ fontSize: 15, fontWeight: 600, margin: 0 }}>{cap.title}</h3>
-                    </div>
-                  </div>
-                  <p style={{ fontSize: 13, color: "var(--color-text-muted)", lineHeight: 1.6, margin: "0 0 12px" }}>
-                    {cap.description}
-                  </p>
-                  <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
-                    {cap.examples.map((ex) => (
-                      <span key={ex} style={{
-                        padding: "3px 10px", borderRadius: 100,
-                        background: "var(--color-bg-muted)", fontSize: 11, color: "var(--color-text-muted)",
-                      }}>
-                        {ex}
-                      </span>
-                    ))}
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-
-            {/* Sub-header: 連携で拡張する8分野 */}
-            <div style={{
-              display: "flex", alignItems: "center", gap: 8, marginBottom: 16, marginTop: 40,
-            }}>
-              <span style={{
-                padding: "3px 10px", borderRadius: 100,
-                background: "#ecfeff", border: "1px solid #a5f3fc",
-                fontSize: 12, fontWeight: 600, color: "#0891b2",
-              }}>
-                連携で拡張
-              </span>
-              <span style={{ fontSize: 13, color: "var(--color-text-muted)" }}>
-                — 外部サービスやツールとの組み合わせで実現する8᠘域
-              </span>
-            </div>
-
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))", gap: 16 }}>
-              {capabilities.slice(13).map((cap, i) => (
-                <motion.div
-                  key={cap.num}
-                  initial={{ opacity: 0, y: 16 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: i * 0.05 }}
-                  style={{
-                    padding: 24, borderRadius: 12,
-                    background: "var(--color-bg)",
-                    border: "1px solid var(--color-border)",
-                    cursor: "default",
-                    transition: "border-color 150ms ease, box-shadow 150ms ease",
-                    position: "relative",
-                  }}
-                  whileHover={{ borderColor: "var(--color-border-strong)", boxShadow: "0 2px 8px rgba(0,0,0,0.06)" }}
-                >
-                  {cap.tag && (
+            {/* 4 categories × grid */}
+            {capabilityCategories.map((cat, catIdx) => {
+              const items = capabilities.filter((c) => c.category === cat.key)
+              return (
+                <div key={cat.key}>
+                  <div style={{
+                    display: "flex", alignItems: "center", gap: 8, marginBottom: 16,
+                    marginTop: catIdx === 0 ? 24 : 40, flexWrap: "wrap",
+                  }}>
                     <span style={{
-                      position: "absolute", top: 12, right: 12,
-                      padding: "2px 8px", borderRadius: 100,
-                      background: "#ecfeff", fontSize: 10, fontWeight: 500, color: "#0891b2",
+                      padding: "3px 10px", borderRadius: 100,
+                      background: cat.bgColor, border: `1px solid ${cat.borderColor}`,
+                      fontSize: 12, fontWeight: 600, color: cat.color,
                     }}>
-                      {cap.tag}
+                      {cat.label}
                     </span>
-                  )}
-                  <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 12 }}>
-                    <div style={{
-                      width: 40, height: 40, borderRadius: 10,
-                      background: cap.bgColor, display: "flex", alignItems: "center", justifyContent: "center",
-                    }}>
-                      <Icon d={icons[cap.iconKey]} size={20} color={cap.color} />
-                    </div>
-                    <div>
-                      <span style={{ fontSize: 11, fontWeight: 600, color: cap.color }}>{cap.num}</span>
-                      <h3 style={{ fontSize: 15, fontWeight: 600, margin: 0 }}>{cap.title}</h3>
-                    </div>
+                    <span style={{ fontSize: 13, color: "var(--color-text-muted)" }}>
+                      {cat.sub}
+                    </span>
                   </div>
-                  <p style={{ fontSize: 13, color: "var(--color-text-muted)", lineHeight: 1.6, margin: "0 0 12px" }}>
-                    {cap.description}
-                  </p>
-                  <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
-                    {cap.examples.map((ex) => (
-                      <span key={ex} style={{
-                        padding: "3px 10px", borderRadius: 100,
-                        background: "var(--color-bg-muted)", fontSize: 11, color: "var(--color-text-muted)",
-                      }}>
-                        {ex}
-                      </span>
+
+                  <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))", gap: 16 }}>
+                    {items.map((cap, i) => (
+                      <motion.div
+                        key={cap.num}
+                        initial={{ opacity: 0, y: 16 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: i * 0.05 }}
+                        style={{
+                          padding: 24, borderRadius: 12,
+                          background: "var(--color-bg)",
+                          border: "1px solid var(--color-border)",
+                          cursor: "default",
+                          transition: "border-color 150ms ease, box-shadow 150ms ease",
+                        }}
+                        whileHover={{ borderColor: "var(--color-border-strong)", boxShadow: "0 2px 8px rgba(0,0,0,0.06)" }}
+                      >
+                        <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 12 }}>
+                          <div style={{
+                            width: 40, height: 40, borderRadius: 10,
+                            background: cap.bgColor, display: "flex", alignItems: "center", justifyContent: "center",
+                          }}>
+                            <Icon d={icons[cap.iconKey]} size={20} color={cap.color} />
+                          </div>
+                          <div>
+                            <span style={{ fontSize: 11, fontWeight: 600, color: cap.color }}>{cap.num}</span>
+                            <h3 style={{ fontSize: 15, fontWeight: 600, margin: 0 }}>{cap.title}</h3>
+                          </div>
+                        </div>
+                        <p style={{ fontSize: 13, color: "var(--color-text-muted)", lineHeight: 1.6, margin: "0 0 12px" }}>
+                          {cap.description}
+                        </p>
+                        <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+                          {cap.examples.map((ex) => (
+                            <span key={ex} style={{
+                              padding: "3px 10px", borderRadius: 100,
+                              background: "var(--color-bg-muted)", fontSize: 11, color: "var(--color-text-muted)",
+                            }}>
+                              {ex}
+                            </span>
+                          ))}
+                        </div>
+                      </motion.div>
                     ))}
                   </div>
-                </motion.div>
-              ))}
-            </div>
+                </div>
+              )
+            })}
           </Section>
 
           {/* ─── Section 2: 活用事例 ─── */}
